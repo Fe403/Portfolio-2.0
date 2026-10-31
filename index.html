@@ -3,90 +3,172 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>André fellipe | Portfólio </title>
-
-    <link rel="stylesheet" href = "style.css">
+    <title>André Fellipe | Portfólio</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@0,700;0,800;0,900;1,900&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
 </head>
 <body>
     <header class="topbar">
-        <a class ="brand" href="#inicio">&lt;/&gt;FE403</a>
+        <a class="brand" href="#inicio"><span class="marca">&lt;/&gt;</span> FE403</a>
         <nav>
             <a href="#inicio">Início</a>
             <a href="#projetos">Projetos</a>
             <a href="#diplomas">Diplomas</a>
             <a href="#contato">Contato</a>
-
         </nav>
         <button id="tema">Branco</button>
     </header>
 
     <main>
-       <section id="inicio">
-            <h1>Olá, eu sou André Fellipe</h1>
-            <p class="funcao">Estudante de Ciência da Computação</p>
-            <p>Sou um desenvolvedor web e apaixonado por tecnologia. Aqui você encontrará alguns dos meus projetos, diplomas e informações de contato. Sinta-se à vontade para explorar e conhecer mais sobre o meu trabalho.</p>
+        <!-- INÍCIO -->
+        <section id="inicio" class="conteudo">
+            <div class="hero-texto">
+                <p class="eyebrow"><span>///</span> PORTFÓLIO 2026</p>
+                <h1>Olá, eu sou <span class="contorno">André.</span></h1>
+                <p class="funcao">Estudante de Ciência da Computação • Desenvolvedor</p>
+                <p class="intro">Sou um desenvolvedor web e apaixonado por tecnologia. Aqui você encontrará alguns dos meus projetos, diplomas e informações de contato. Sinta-se à vontade para explorar e conhecer mais sobre o meu trabalho.</p>
+                <a class="btn btn-cheio" href="#projetos">Ver projetos →</a>
+                <a class="btn" href="#contato">Fale comigo</a>
+            </div>
 
-            <a class="btn" href="#projetos">Ver projetos</a>
-            <a class="btn" href="#contato">Fale comigo</a>
-
-            <img src="foto.jpg" alt="Foto de André Fellipe">
+            <div class="hero-visual">
+                <div class="foto">
+                    <span class="fita fita-topo"></span>
+                    <span class="fita fita-baixo"></span>
+                    <img src="assets/André Fellipe.jpg" alt="Foto de André Fellipe">
+                    <span class="legenda">ESTUDANTE / DEV</span>
+                </div>
+                <span class="sticker sticker-code">&lt;/&gt;<strong>CODE</strong><small>EVERYDAY</small></span>
+                <span class="sticker sticker-ready">READY<br>TO SHIP!</span>
+            </div>
         </section>
 
+        <!-- PROJETOS -->
         <section id="projetos">
-            <h2>Projetos</h2>
-            <div class="projeto">
-                <h3>Vitalmen</h3>
-                <p>O Vitalmen é um projeto que visa melhorar a qualidade de vida dos usuários masculinos, com dicas de saúde e bem-estar.</p>
-                <a href="https://github.com/VitalMen-MVP/VitalMen" target="_blank">GitHub</a>
-            </div>
-            <div class="projeto">
-                <h3>Painel-otimização</h3>
-                <p>O Painel-otimização é um projeto que visa melhorar a eficiência de algumas coisas dentro do Windows. Ainda em beta.</p>
-                <a href="https://github.com/Fe403/painel-otimizacao" target="_blank">GitHub</a>
+            <div class="conteudo">
+                <div class="cabecalho">
+                    <div>
+                        <p class="eyebrow"><span>01.</span> TRABALHOS SELECIONADOS</p>
+                        <h2>Projetos</h2>
+                    </div>
+                    <p>Algumas coisas que tirei do papel, do primeiro rabisco ao deploy.</p>
+                </div>
+
+                <div class="grade">
+                    <article class="projeto">
+                        <div class="projeto-arte"><span class="numero">01</span></div>
+                        <div class="projeto-corpo">
+                            <h3>Vitalmen</h3>
+                            <p>Projeto que visa melhorar a qualidade de vida do público masculino, com dicas de saúde e bem-estar.</p>
+                            <div class="tags">
+                                <span class="tag">HTML</span>
+                                <span class="tag">CSS</span>
+                                <span class="tag">JavaScript</span>
+                            </div>
+                            <div class="acoes">
+                                <a href="#">Ver demo →</a>
+                                <a href="https://github.com/seu-usuario" target="_blank">GitHub</a>
+                            </div>
+                        </div>
+                    </article>
+
+                    <article class="projeto">
+                        <div class="projeto-arte"><span class="numero">02</span></div>
+                        <div class="projeto-corpo">
+                            <h3>Painel-otimização</h3>
+                            <p>Projeto que visa melhorar a eficiência de algumas coisas dentro do Windows. Ainda em beta.</p>
+                            <div class="tags">
+                                <span class="tag">Python</span>
+                                <span class="tag">Windows</span>
+                            </div>
+                            <div class="acoes">
+                                <a href="#">Ver demo →</a>
+                                <a href="https://github.com/seu-usuario" target="_blank">GitHub</a>
+                            </div>
+                        </div>
+                    </article>
+                </div>
             </div>
         </section>
 
-        <section id="diplomas">
-            <h2>Diplomas</h2>
-            <div class="diploma">
-                <h3>Intensiva Cursos</h3>
-                <p>Curso de informática básica e avançada, onde aprendi conceitos fundamentais de informática.</p>
-            </div>
-            <div class="diploma">
-                <h3>Python Essentials</h3>
-                <p>Curso introdutório de Python, onde aprendi os conceitos fundamentais da linguagem.</p>
-            </div>
-            <div class="diploma">
-                <h3>Cisco</h3>
-                <p>Curso de introdução à Cibersegurança, onde aprendi conceitos iniciais de segurança da informação e proteção de dados.</p>
+        <!-- DIPLOMAS -->
+        <section id="diplomas" class="cert-section">
+            <div class="conteudo">
+                <div class="cabecalho">
+                    <div>
+                        <p class="eyebrow"><span>02.</span> SEMPRE APRENDENDO</p>
+                        <h2>Diplomas<br>&amp; Certificados</h2>
+                    </div>
+                    <span class="selo-aprovado">Aprovado!</span>
+                </div>
+
+                <div class="grade">
+                    <article class="certificado">
+                        <div class="cert-topo"><span>INF.001</span><span>&lt;/&gt;</span></div>
+                        <span class="selo">01</span>
+                        <p class="cert-tipo">Certificado de conclusão</p>
+                        <h3>Intensiva Cursos</h3>
+                        <div class="cert-rodape"><span>Informática</span><span>2025</span></div>
+                    </article>
+
+                    <article class="certificado">
+                        <div class="cert-topo"><span>PY.002</span><span>&lt;/&gt;</span></div>
+                        <span class="selo">02</span>
+                        <p class="cert-tipo">Certificado de conclusão</p>
+                        <h3>Python Essentials</h3>
+                        <div class="cert-rodape"><span>Python</span><span>2025</span></div>
+                    </article>
+
+                    <article class="certificado">
+                        <div class="cert-topo"><span>CIS.003</span><span>&lt;/&gt;</span></div>
+                        <span class="selo">03</span>
+                        <p class="cert-tipo">Certificado de conclusão</p>
+                        <h3>Cisco Cibersegurança</h3>
+                        <div class="cert-rodape"><span>Cisco</span><span>2025</span></div>
+                    </article>
+                </div>
             </div>
         </section>
 
+        <!-- CONTATO -->
         <section id="contato">
-            <h2>Vamos trocar uma ideia?</h2>
+            <div class="conteudo contato-grid">
+                <div>
+                    <p class="eyebrow"><span>03.</span> CONTATO</p>
+                    <h2>Vamos trocar <span class="contorno">uma ideia?</span></h2>
+                    <p class="texto">Tem um projeto, uma vaga ou só quer falar sobre código? Manda uma mensagem. A próxima boa ideia pode começar aqui.</p>
+                    <div class="links">
+                        <a href="https://github.com/seu-usuario" target="_blank">GitHub</a>
+                        <a href="https://linkedin.com/in/seu-usuario" target="_blank">LinkedIn</a>
+                        <a href="mailto:andrefellipe676@gmail.com">E-mail</a>
+                    </div>
+                </div>
 
-            <form>
-                <label for="nome">Seu nome</label>
-                <input type="text" id="nome" name="nome" required>
-
-                <label for="email">Seu e-mail</label>
-                <input type="email" id="email" name="email" required>
-
-                <label for="mensagem">Sua mensagem</label>
-                <textarea id="mensagem" name="mensagem" rows="5" required></textarea>
-
-                <button type="submit">Enviar mensagem</button>
-            </form>
-
-            <div class="links">
-                <a href="https://github.com/seu-usuario" target="_blank">GitHub</a>
-                <a href="https://linkedin.com/in/seu-usuario" target="_blank">LinkedIn</a>
-                <a href="mailto:andrefellipe676@gmail.com">E-mail</a>
+                <form>
+                    <div class="linha">
+                        <div class="campo">
+                            <label for="nome">Seu nome</label>
+                            <input type="text" id="nome" name="nome" placeholder="Como devo te chamar?" required>
+                        </div>
+                        <div class="campo">
+                            <label for="email">Seu e-mail</label>
+                            <input type="email" id="email" name="email" placeholder="voce@email.com" required>
+                        </div>
+                    </div>
+                    <label for="mensagem">Sua mensagem</label>
+                    <textarea id="mensagem" name="mensagem" rows="5" placeholder="Conta aí..." required></textarea>
+                    <button type="submit">Enviar mensagem →</button>
+                </form>
             </div>
         </section>
     </main>
+
     <footer>
-        <p>© 2026 André Fellipe.Todos os direitos reservados.</p>
+        <div class="conteudo">
+            <a class="brand" href="#inicio"><span class="marca">&lt;/&gt;</span> FE403</a>
+            <p>© 2026 ANDRÉ FELLIPE — FEITO NA RAÇA E NO CAFÉ.</p>
+            <span class="rolling">KEEP ROLLING</span>
+        </div>
     </footer>
 
     <script src="script.js"></script>
