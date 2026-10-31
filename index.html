@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>André fellipe | Portfólio </title>
+
+    <link rel="stylesheet" href = "style.css">
+</head>
+<body>
+    <header class="topbar">
+        <a class ="brand" href="#inicio">&lt;/&gt; DEV//STREET</a>
+        <nav>
+            <a href="#inicio">Início</a>
+            <a href="#projetos">Projetos</a>
+            <a href="#diplomas">Diplomas</a>
+            <a href="#contato">Contato</a>
+
+        </nav>
+        <button id="tema">Branco</button>
+    </header>
+
+    <main>
+       <section id="inicio">
+            <h1>Olá, eu sou André Fellipe</h1>
+            <p class="funcao">Estudante de Ciência da Computação</p>
+            <p>Sou um desenvolvedor web e apaixonado por tecnologia. Aqui você encontrará alguns dos meus projetos, diplomas e informações de contato. Sinta-se à vontade para explorar e conhecer mais sobre o meu trabalho.</p>
+
+            <a class="btn" href="#projetos">Ver projetos</a>
+            <a class="btn" href="#contato">Fale comigo</a>
+
+            <img src="foto.jpg" alt="Foto de André Fellipe">
+        </section>
+
+        <section id="projetos">
+            <h2>Projetos</h2>
+            <div class="projeto">
+                <h3>Vitalmen</h3>
+                <p>O Vitalmen é um projeto que visa melhorar a qualidade de vida dos usuários masculinos, com dicas de saúde e bem-estar.</p>
+                <a href="https://github.com/VitalMen-MVP/VitalMen" target="_blank">GitHub</a>
+            </div>
+            <div class="projeto">
+                <h3>Painel-otimização</h3>
+                <p>O Painel-otimização é um projeto que visa melhorar a eficiência de algumas coisas dentro do Windows. Ainda em beta.</p>
+                <a href="https://github.com/Fe403/painel-otimizacao" target="_blank">GitHub</a>
+            </div>
+        </section>
+
+        <section id="diplomas">
+            <h2>Diplomas</h2>
+            <div class="diploma">
+                <h3>Intensiva Cursos</h3>
+                <p>Curso de informática básica e avançada, onde aprendi conceitos fundamentais de informática.</p>
+            </div>
+            <div class="diploma">
+                <h3>Python Essentials</h3>
+                <p>Curso introdutório de Python, onde aprendi os conceitos fundamentais da linguagem.</p>
+            </div>
+            <div class="diploma">
+                <h3>Cisco</h3>
+                <p>Curso de introdução à Cibersegurança, onde aprendi conceitos iniciais de segurança da informação e proteção de dados.</p>
+            </div>
+        </section>
+
+        <section id="contato">
+            <h2>Vamos trocar uma ideia?</h2>
+
+            <form>
+                <label for="nome">Seu nome</label>
+                <input type="text" id="nome" name="nome" required>
+
+                <label for="email">Seu e-mail</label>
+                <input type="email" id="email" name="email" required>
+
+                <label for="mensagem">Sua mensagem</label>
+                <textarea id="mensagem" name="mensagem" rows="5" required></textarea>
+
+                <button type="submit">Enviar mensagem</button>
+            </form>
+
+            <div class="links">
+                <a href="https://github.com/seu-usuario" target="_blank">GitHub</a>
+                <a href="https://linkedin.com/in/seu-usuario" target="_blank">LinkedIn</a>
+                <a href="mailto:andrefellipe676@gmail.com">E-mail</a>
+            </div>
+        </section>
+    </main>
+    <footer>
+        <p>© 2026 André Fellipe.Todos os direitos reservados.</p>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>

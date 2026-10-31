@@ -1,0 +1,24 @@
+:root {
+    --bg: #0d0d0d;
+    --texto: #f7f7f5;
+    --cinza: #999;
+    --borda: #424242;
+
+}
+
+body.claro {
+    --bg:#f3f3f0;
+    --texto:#0d0d0d;
+    --cinza: #5d5d5d;
+    --borda: #ababab;
+}
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing: border-box;
+}
+
+body{
+    background: var(--bg);
+}
