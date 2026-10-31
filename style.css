@@ -124,3 +124,21 @@ h1{
     display: grid; gap: 24px;
     grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
 }
+
+h2 { grid-column: 1/ -1; }
+
+.projeto, .diploma{
+    padding: 24px;
+    border: 2px solid var(--borda);
+    transition: transform .2s;
+}
+
+.projeto:hover, .diploma:hover { transform: translateY(-8px); }
+.projeto h3, .diploma h3 { font-size: 28px; margin-bottom: 8px; }
+.projeto p, .diploma p { color: var(--cinza); font-size: 14px; }
+
+.projeto a {
+  display: inline-block; margin-top: 18px;
+  font-weight: bold; font-size: 12px; text-transform: uppercase;
+  border-bottom: 2px solid var(--texto);
+}
