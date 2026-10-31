@@ -142,3 +142,46 @@ h2 { grid-column: 1/ -1; }
   font-weight: bold; font-size: 12px; text-transform: uppercase;
   border-bottom: 2px solid var(--texto);
 }
+
+form{
+    display: flex;
+    flex-direction:column;
+    max-width: 600px;
+    padding: 30px;
+    border: 2px solid var(--texto);
+    box-shadow: 8px 8px 0 var(--borda);
+}
+
+label {font-size: 12px; 
+    font-weight: bold; 
+    text-transform: uppercase; 
+    margin: 14px 0 6px;
+}
+
+input, textarea{
+    padding: 12px;
+    background: var (--bg);
+    color: var (--texto);
+    border: 1px solid var(--borda);
+    font: inherit;
+}
+
+input:focus, textarea:focus { 
+    outline: none;
+    border-color: var(--texto);    
+}
+
+form button{
+    margin-top: 22px;
+    padding: 14px;
+    background: var(--texto);
+    color: var(--bg);
+    border: noen;
+    font-weight: bold;
+    text-transform: uppercase;
+    cursor: pointer;
+}
+
+.links { display: flex; gap: 12px; margin-top: 30px; }
+.links a { padding: 9px 14px; border: 1px solid var(--borda); font-size: 13px; }
+.links a:hover { background: var(--texto); color: var(--bg); }
