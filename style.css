@@ -34,7 +34,7 @@ body {
     font-family: 'DM Sans', sans-serif;
     line-height: 1.6;
     overflow-x: hidden;
-    transition: background .2s, color .2s;
+    transition: background .3s, color .3s;
 }
 
 a {
@@ -258,9 +258,6 @@ nav a:hover {
     transform: rotate(-25deg);
 }
 
-.acoes span { cursor: default; color: var(--cinza); }
-
-
 .fita-baixo {
     right: -28px;
     bottom: -8px;
@@ -337,16 +334,17 @@ nav a:hover {
     background: var(--superficie);
     border: 2px solid var(--texto);
     box-shadow: 6px 6px 0 var(--borda);
-    transition: transform .2s;
+    transition: transform .1s ease-out, box-shadow .2s, background .3s, border-color .3s;
 }
 
 .projeto:hover {
-    transform: translateY(-9px);
+    box-shadow: 10px 12px 0 var(--borda);
 }
 
 .projeto-arte {
     position: relative;
     height: 215px;
+    overflow: hidden;
     background-color: #111;
     background-image: repeating-linear-gradient(135deg, #333 0 2px, transparent 2px 12px);
 }
@@ -355,13 +353,20 @@ nav a:hover {
     width: 100%;
     height: 100%;
     object-fit: cover;
+    transition: transform .4s;
+}
+
+.projeto:hover .projeto-arte img {
+    transform: scale(1.08);
 }
 
 .numero {
     position: absolute;
+    z-index: 1;
     top: 12px;
     left: 14px;
     color: #d9d9d9;
+    text-shadow: 0 0 6px #000;
     font: 900 14px 'Barlow Condensed', sans-serif;
 }
 
@@ -407,6 +412,11 @@ nav a:hover {
     font-weight: 800;
     text-transform: uppercase;
     letter-spacing: 1px;
+}
+
+.acoes span {
+    cursor: default;
+    color: var(--cinza);
 }
 
 /* ===== Diplomas ===== */
@@ -639,6 +649,46 @@ footer p {
     transform: rotate(-4deg);
 }
 
+/* ===== Animação de clique nos botões ===== */
+button,
+.btn,
+.links a {
+    position: relative;
+    overflow: hidden;
+}
+
+.onda {
+    position: absolute;
+    border-radius: 50%;
+    background: currentColor;
+    opacity: .35;
+    transform: scale(0);
+    pointer-events: none;
+    animation: onda .6s ease-out;
+}
+
+@keyframes onda {
+    to {
+        transform: scale(4);
+        opacity: 0;
+    }
+}
+
+button:active,
+.btn:active,
+.links a:active {
+    transform: scale(.95);
+}
+
+/* ===== Troca de tema suave ===== */
+.topbar,
+form,
+footer,
+input,
+textarea {
+    transition: background .3s, color .3s, border-color .3s;
+}
+
 /* ===== Celular ===== */
 @media (max-width: 800px) {
     nav {
@@ -711,4 +761,238 @@ footer p {
         align-items: flex-start;
         padding-block: 36px;
     }
+}
+
+/* =========================================================
+   ANIMAÇÕES NOVAS
+   ========================================================= */
+
+/* ----- Entrada ao rolar (o JS adiciona .revelar e .visivel) ----- */
+.revelar { opacity: 0; }
+.revelar.visivel {
+    animation: surgir .7s ease forwards;
+    animation-delay: var(--atraso, 0s);
+}
+@keyframes surgir {
+    from { opacity: 0; translate: 0 50px; }
+    to   { opacity: 1; translate: 0 0; }
+}
+form.revelar.visivel { animation-name: carta; animation-duration: .9s; }
+@keyframes carta {
+    from { opacity: 0; translate: 0 90px; rotate: -5deg; }
+    to   { opacity: 1; translate: 0 0; rotate: 0deg; }
+}
+
+/* ----- Diplomas ----- */
+.certificado {
+    overflow: hidden;
+    transition: transform .3s ease, box-shadow .3s ease;
+}
+.certificado:hover {
+    transform: translateY(-10px) rotate(-1.5deg);
+    box-shadow: 12px 14px 0 #6b6b6b;
+}
+.certificado:nth-child(even):hover { transform: translateY(-10px) rotate(1.5deg); }
+
+/* brilho que atravessa o card */
+.certificado::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -75%;
+    z-index: 3;
+    width: 50%;
+    height: 100%;
+    background: linear-gradient(100deg, transparent, rgba(255, 255, 255, .7), transparent);
+    transform: skewX(-20deg);
+    pointer-events: none;
+}
+.certificado:hover::before { animation: brilho .8s ease; }
+@keyframes brilho { to { left: 130%; } }
+
+/* o selo gira uma volta inteira */
+.selo {
+    transform: rotate(8deg) scale(1);
+    transition: transform .6s ease;
+}
+.certificado:hover .selo { transform: rotate(368deg) scale(1.15); }
+
+/* "APROVADO!" balançando sozinho */
+.selo-aprovado { animation: balanco 3.5s ease-in-out infinite; }
+@keyframes balanco {
+    0%, 100% { transform: rotate(8deg) scale(1); }
+    50%      { transform: rotate(16deg) scale(1.06); }
+}
+
+/* ----- Contato: o quadrado vira uma carta ----- */
+form {
+    position: relative;
+    transform: rotate(.6deg);
+    transition: transform .4s ease, box-shadow .4s ease, background .3s, color .3s, border-color .3s;
+}
+form:hover,
+form:focus-within {
+    transform: rotate(0deg) translateY(-6px);
+    box-shadow: 14px 14px 0 var(--borda);
+}
+
+/* selo postal no canto */
+form::before {
+    content: '✉';
+    position: absolute;
+    top: -22px;
+    right: 26px;
+    display: grid;
+    place-items: center;
+    width: 54px;
+    height: 62px;
+    color: #0d0d0d;
+    background: #d9d9d9;
+    border: 3px dashed #0d0d0d;
+    font-size: 24px;
+    transform: rotate(6deg);
+    animation: selo-postal 4s ease-in-out infinite;
+}
+@keyframes selo-postal {
+    0%, 100% { transform: rotate(6deg); }
+    50%      { transform: rotate(-4deg) translateY(-3px); }
+}
+
+/* campos: cursor de CANETA + animação ao focar */
+input,
+textarea {
+    cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='32' height='32' viewBox='0 0 24 24' fill='white' stroke='black' stroke-width='1.6' stroke-linejoin='round'%3E%3Cpath d='M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4Z'/%3E%3C/svg%3E") 4 27, text;
+    transition: background .3s, color .3s, border-color .3s, transform .2s, box-shadow .2s;
+}
+input:hover,
+textarea:hover { border-color: var(--texto); }
+input:focus,
+textarea:focus { transform: translate(-2px, -2px); }
+
+label { transition: letter-spacing .3s, transform .3s; }
+label:has(+ input:focus),
+label:has(+ textarea:focus) {
+    letter-spacing: 3.5px;
+    transform: translateX(4px);
+}
+
+/* mensagem em papel pautado */
+textarea {
+    padding: 0 14px;
+    line-height: 28px;
+    background-color: var(--bg);
+    background-image: repeating-linear-gradient(transparent 0 27px, var(--borda) 27px 28px);
+    background-attachment: local;
+}
+
+/* envelope que voa ao enviar */
+.voando {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    font-size: 48px;
+    pointer-events: none;
+}
+
+/* ----- Botões ----- */
+/* botão vazado: preenche da esquerda para a direita */
+.btn:not(.btn-cheio) {
+    background: linear-gradient(var(--texto), var(--texto)) no-repeat left center / 0% 100%;
+    transition: background-size .35s ease, color .35s ease, transform .15s, box-shadow .15s;
+}
+.btn:not(.btn-cheio):hover {
+    background-size: 100% 100%;
+    color: var(--bg);
+}
+
+/* botão cheio: pulsa chamando atenção */
+.btn-cheio { animation: pulso 2.4s infinite; }
+.btn-cheio:hover { animation: none; }
+@keyframes pulso {
+    0%, 100% { box-shadow: 0 0 0 0 rgba(217, 217, 217, .55); }
+    70%      { box-shadow: 0 0 0 14px rgba(217, 217, 217, 0); }
+}
+
+/* botão de tema: inverte as cores e o texto vira (flip) */
+#tema { transition: background .25s, color .25s, transform .15s, box-shadow .15s; }
+#tema:hover {
+    background: var(--texto);
+    color: var(--bg);
+    transform: translate(-2px, -2px);
+    box-shadow: 5px 5px 0 var(--borda);
+}
+#tema:active { transform: scale(.95); }
+#tema-texto { display: inline-block; }
+.virar { animation: virar .45s ease; }
+@keyframes virar {
+    from { transform: rotateX(90deg); opacity: 0; }
+    to   { transform: rotateX(0deg); opacity: 1; }
+}
+
+/* botão enviar: inverte e a seta anda */
+form button {
+    transition: background .25s, color .25s, border-color .25s, transform .15s, box-shadow .15s;
+}
+form button span:not(.onda) {
+    display: inline-block;
+    transition: transform .25s;
+}
+form button:hover {
+    background: var(--bg);
+    color: var(--texto);
+    border-color: var(--texto);
+    transform: translate(-2px, -2px);
+    box-shadow: 5px 5px 0 var(--borda);
+}
+form button:hover span:not(.onda) { transform: translateX(6px); }
+form button:active { transform: scale(.95); }
+
+/* links de contato pulam */
+.links a { transition: background .15s, color .15s, transform .2s, box-shadow .2s; }
+.links a:hover {
+    transform: translateY(-4px) rotate(-2deg);
+    box-shadow: 4px 4px 0 var(--borda);
+}
+.links a:active { transform: scale(.95); }
+
+/* GitHub dos cards: sublinhado que cresce */
+.acoes a { position: relative; }
+.acoes a::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: -3px;
+    width: 0;
+    height: 2px;
+    background: currentColor;
+    transition: width .3s;
+}
+.acoes a:hover::after { width: 100%; }
+
+/* menu: sublinhado que abre do centro */
+nav a { position: relative; padding-block: 6px; }
+nav a::after {
+    content: '';
+    position: absolute;
+    right: 50%;
+    bottom: 0;
+    left: 50%;
+    height: 2px;
+    background: currentColor;
+    transition: left .25s, right .25s;
+}
+nav a:hover { text-decoration: none; }
+nav a:hover::after { right: 0; left: 0; }
+
+/* adesivo do rodapé */
+.rolling { transition: transform .3s; }
+.rolling:hover { transform: rotate(4deg) scale(1.1); }
+
+/* quem prefere menos movimento no sistema */
+@media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+        animation: none !important;
+        transition-duration: .01ms !important;
+    }
+    .revelar { opacity: 1 !important; }
 }
