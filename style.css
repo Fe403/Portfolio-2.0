@@ -258,6 +258,9 @@ nav a:hover {
     transform: rotate(-25deg);
 }
 
+.acoes span { cursor: default; color: var(--cinza); }
+
+
 .fita-baixo {
     right: -28px;
     bottom: -8px;
