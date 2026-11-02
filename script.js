@@ -96,3 +96,66 @@ if (form) {
     setTimeout(() => (textoEnviar.textContent = 'Enviar mensagem →'), 3000);
   });
 }
+
+/* ===== Títulos: separar em letras e animar ===== */
+function dividirLetras(el) {
+  let indice = 0;
+  let texto = '';
+
+  function processar(no) {
+    [...no.childNodes].forEach((filho) => {
+      if (filho.nodeType === 3) {                       // é um texto
+        const pedaco = document.createDocumentFragment();
+        filho.textContent.split(/(\s+)/).forEach((parte) => {
+          if (!parte) return;
+          if (/^\s+$/.test(parte)) {                    // espaço entre palavras
+            pedaco.appendChild(document.createTextNode(' '));
+            texto += ' ';
+            return;
+          }
+          const palavra = document.createElement('span');
+          palavra.className = 'palavra';
+          palavra.setAttribute('aria-hidden', 'true');
+          [...parte].forEach((letra) => {
+            const s = document.createElement('span');
+            s.className = 'letra';
+            s.textContent = letra;
+            s.style.setProperty('--i', indice++);       // posição da letra (para o atraso)
+            palavra.appendChild(s);
+          });
+          texto += parte;
+          pedaco.appendChild(palavra);
+        });
+        no.replaceChild(pedaco, filho);
+      } else if (filho.nodeName === 'BR') {
+        texto += ' ';
+      } else {
+        processar(filho);                               // entra em <span> e similares
+      }
+    });
+  }
+
+  processar(el);
+  el.setAttribute('aria-label', texto.trim());          // leitores de tela leem o título inteiro
+}
+
+document.querySelectorAll('h1, #projetos h2, #diplomas h2, #contato h2').forEach((titulo) => {
+  dividirLetras(titulo);
+  titulo.classList.add('titulo-anima');
+  observador.observe(titulo);                           // anima quando aparecer na tela
+});
+
+/* ===== Foto: efeito 3D seguindo o mouse ===== */
+const visual = document.querySelector('.hero-visual');
+
+if (visual) {
+  visual.addEventListener('mousemove', (e) => {
+    const r = visual.getBoundingClientRect();
+    visual.style.setProperty('--px', ((e.clientX - r.left) / r.width - 0.5) * 2);
+    visual.style.setProperty('--py', ((e.clientY - r.top) / r.height - 0.5) * 2);
+  });
+  visual.addEventListener('mouseleave', () => {
+    visual.style.setProperty('--px', 0);
+    visual.style.setProperty('--py', 0);
+  });
+}
