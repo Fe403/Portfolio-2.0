@@ -95,6 +95,9 @@ h1 .contorno {
     letter-spacing: 3px;
 }
 
+
+
+
 .eyebrow span {
     color: var(--texto);
     font: 800 17px 'Barlow Condensed', sans-serif;
@@ -123,15 +126,15 @@ h1 .contorno {
     font-weight: 800;
 }
 
-.marca {
-    display: grid;
-    place-items: center;
-    width: 39px;
-    height: 31px;
-    color: var(--bg);
-    background: var(--texto);
-    font-size: 15px;
-    transform: rotate(-4deg);
+.logo {
+    display: block;
+    height: 40px;
+    width: auto;
+    transition: transform .25s;
+}
+
+.brand:hover .logo {
+    transform: rotate(-6deg) scale(1.08);
 }
 
 nav {
@@ -695,9 +698,8 @@ textarea {
         display: none;
     }
 
-    .topbar {
-        grid-template-columns: 1fr auto;
-        padding: 16px 20px;
+        .logo {
+        height: 34px;
     }
 
     #inicio {
