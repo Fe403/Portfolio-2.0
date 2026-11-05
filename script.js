@@ -1,3 +1,34 @@
+/* ===== Intro ===== */
+const intro = document.getElementById('intro');
+
+if (intro) {
+  const barra = intro.querySelector('.intro-barra span');
+  const contador = intro.querySelector('.intro-contador');
+  let valor = 0;
+  let carregou = document.readyState === 'complete';
+  window.addEventListener('load', () => (carregou = true));
+
+  function terminarIntro() {
+    intro.classList.add('saindo');                 // a cortina sobe
+    document.body.classList.remove('carregando');  // libera o scroll e as animações
+    setTimeout(() => intro.remove(), 1000);        // tira do HTML depois
+  }
+
+  const timer = setInterval(() => {
+    const limite = carregou ? 100 : 90;            // trava em 90% até a página carregar de verdade
+    valor = Math.min(valor + Math.floor(Math.random() * 8) + 3, limite);
+
+    barra.style.width = valor + '%';
+    contador.textContent = valor + '%';
+
+    if (valor === 100) {
+      clearInterval(timer);
+      setTimeout(terminarIntro, 400);
+    }
+  }, 90);
+}
+
+
 /* ===== Tema escuro / claro ===== */
 const botaoTema = document.getElementById('tema');
 const textoTema = document.getElementById('tema-texto');
