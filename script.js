@@ -2,30 +2,22 @@
 const intro = document.getElementById('intro');
 
 if (intro) {
-  const barra = intro.querySelector('.intro-barra span');
-  const contador = intro.querySelector('.intro-contador');
-  let valor = 0;
-  let carregou = document.readyState === 'complete';
-  window.addEventListener('load', () => (carregou = true));
+  const TEMPO_MINIMO = 2400;   // a intro fica pelo menos isso (em ms), mesmo se o site carregar rápido
+  const inicio = performance.now();
 
   function terminarIntro() {
-    intro.classList.add('saindo');                 // a cortina sobe
-    document.body.classList.remove('carregando');  // libera o scroll e as animações
-    setTimeout(() => intro.remove(), 1100);        // tira do HTML depois
+    intro.classList.add('saindo');                 // some suavemente
+    document.body.classList.remove('carregando');  // libera o scroll e as animações do site
+    setTimeout(() => intro.remove(), 1000);
   }
 
-  const timer = setInterval(() => {
-    const limite = carregou ? 100 : 90;            // trava em 90% até a página carregar de verdade
-    valor = Math.min(valor + Math.floor(Math.random() * 8) + 3, limite);
+  function quandoPronto() {
+    const restante = Math.max(0, TEMPO_MINIMO - (performance.now() - inicio));
+    setTimeout(terminarIntro, restante);
+  }
 
-    barra.style.width = valor + '%';
-    contador.textContent = valor + '%';
-
-    if (valor === 100) {
-      clearInterval(timer);
-      setTimeout(terminarIntro, 400);
-    }
-  }, 90);
+  if (document.readyState === 'complete') quandoPronto();
+  else window.addEventListener('load', quandoPronto);
 }
 
 /* ===== Tema escuro / claro ===== */
@@ -38,14 +30,46 @@ function aplicarTema(claro) {
   localStorage.setItem('tema', claro ? 'claro' : 'escuro');
 }
 
+function virarTexto() {
+  textoTema.classList.add('virar');
+  textoTema.addEventListener('animationend', () => textoTema.classList.remove('virar'), { once: true });
+}
+
 aplicarTema(localStorage.getItem('tema') === 'claro');
 
 botaoTema.addEventListener('click', () => {
-  aplicarTema(!document.body.classList.contains('claro'));
-  textoTema.classList.add('virar');   // o texto "vira" ao trocar
-  textoTema.addEventListener('animationend', () => textoTema.classList.remove('virar'), { once: true });
-});
+  const vaiFicarClaro = !document.body.classList.contains('claro');
+  const reduzir = matchMedia('(prefers-reduced-motion: reduce)').matches;
 
+  // navegador sem suporte (ou sem animação): troca direto
+  if (!document.startViewTransition || reduzir) {
+    aplicarTema(vaiFicarClaro);
+    virarTexto();
+    return;
+  }
+
+  // o círculo nasce no centro do botão e cresce até cobrir a tela toda
+  const r = botaoTema.getBoundingClientRect();
+  const x = r.left + r.width / 2;
+  const y = r.top + r.height / 2;
+  const raio = Math.hypot(Math.max(x, innerWidth - x), Math.max(y, innerHeight - y));
+
+  document.documentElement.classList.add('trocando-tema');
+
+  const transicao = document.startViewTransition(() => {
+    aplicarTema(vaiFicarClaro);
+    virarTexto();
+  });
+
+  transicao.ready.then(() => {
+    document.documentElement.animate(
+      { clipPath: [`circle(0px at ${x}px ${y}px)`, `circle(${raio}px at ${x}px ${y}px)`] },
+      { duration: 800, easing: 'cubic-bezier(.22, 1, .36, 1)', pseudoElement: '::view-transition-new(root)' }
+    );
+  });
+
+  transicao.finished.finally(() => document.documentElement.classList.remove('trocando-tema'));
+});
 /* ===== Onda ao clicar nos botões ===== */
 document.querySelectorAll('button, .btn, .links a').forEach((el) => {
   el.addEventListener('click', (e) => {
@@ -239,3 +263,20 @@ if (visual) {
   });
   visual.addEventListener('pointerleave', () => { alvoX = alvoY = 0; iniciar(); });
 }
+/* ===== Menu: marca a seção atual ===== */
+const linksMenu = document.querySelectorAll('nav a');
+
+const espiao = new IntersectionObserver((entradas) => {
+  entradas.forEach((entrada) => {
+    if (entrada.isIntersecting) {
+      linksMenu.forEach((a) =>
+        a.classList.toggle('ativo', a.getAttribute('href') === '#' + entrada.target.id)
+      );
+    }
+  });
+}, { rootMargin: '-45% 0px -50% 0px' });   // só conta a faixa do meio da tela
+
+linksMenu.forEach((a) => {
+  const secao = document.querySelector(a.getAttribute('href'));
+  if (secao) espiao.observe(secao);
+});

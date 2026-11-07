@@ -19,9 +19,9 @@
     <!-- INTRO -->
     <div id="intro" aria-hidden="true">
       <img src="assets/fe403-icone.png" alt="" class="intro-logo" />
-      <p class="intro-nome">FE403</p>
-      <div class="intro-barra"><span></span></div>
-      <p class="intro-contador">0%</p>
+      <div class="spinner">
+        <span></span><span></span><span></span><span></span><span></span>
+      </div>
     </div>
 
     <header class="topbar">
@@ -393,17 +393,17 @@
       </div>
     </footer>
 
-    <script src="script.js"></script>
+        <script src="script.js"></script>
     <script>
-      // rede de segurança: se a intro não sair em 5s, remove sozinha
+      // rede de segurança: se a intro não sair em 8s, remove sozinha
       setTimeout(() => {
-        const i = document.getElementById('intro');
+        const i = document.getElementById("intro");
         if (i) {
-          i.classList.add('saindo');
-          document.body.classList.remove('carregando');
+          i.classList.add("saindo");
+          document.body.classList.remove("carregando");
           setTimeout(() => i.remove(), 1000);
         }
-      }, 5000);
+      }, 8000);
     </script>
   </body>
 </html>
