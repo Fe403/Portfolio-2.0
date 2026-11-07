@@ -11,7 +11,7 @@ if (intro) {
   function terminarIntro() {
     intro.classList.add('saindo');                 // a cortina sobe
     document.body.classList.remove('carregando');  // libera o scroll e as animações
-    setTimeout(() => intro.remove(), 1000);        // tira do HTML depois
+    setTimeout(() => intro.remove(), 1100);        // tira do HTML depois
   }
 
   const timer = setInterval(() => {
@@ -27,7 +27,6 @@ if (intro) {
     }
   }, 90);
 }
-
 
 /* ===== Tema escuro / claro ===== */
 const botaoTema = document.getElementById('tema');
@@ -64,16 +63,54 @@ document.querySelectorAll('button, .btn, .links a').forEach((el) => {
   });
 });
 
-/* ===== Cards de projeto inclinam com o mouse ===== */
+/* ===== Suavização: o valor "persegue" o alvo aos poucos ===== */
+const lerp = (a, b, t) => a + (b - a) * t;
+
+/* ===== Cards de projeto: inclinação suave ===== */
 document.querySelectorAll('.projeto').forEach((card) => {
-  card.addEventListener('mousemove', (e) => {
-    const r = card.getBoundingClientRect();
-    const rotY = ((e.clientX - r.left) / r.width - 0.5) * 12;
-    const rotX = ((e.clientY - r.top) / r.height - 0.5) * -12;
+  let rect;
+  let rx = 0, ry = 0, lev = 0;                // onde o card está agora
+  let alvoRx = 0, alvoRy = 0, alvoLev = 0;    // para onde ele quer ir
+  let raf = null;
+
+  function animar() {
+    rx = lerp(rx, alvoRx, 0.12);
+    ry = lerp(ry, alvoRy, 0.12);
+    lev = lerp(lev, alvoLev, 0.12);
+
     card.style.transform =
-      `perspective(800px) rotateX(${rotX}deg) rotateY(${rotY}deg) translateY(-8px)`;
+      `perspective(800px) rotateX(${rx}deg) rotateY(${ry}deg) translateY(${-8 * lev}px)`;
+
+    const parado =
+      Math.abs(rx - alvoRx) < 0.01 &&
+      Math.abs(ry - alvoRy) < 0.01 &&
+      Math.abs(lev - alvoLev) < 0.01;
+
+    if (parado) {
+      raf = null;
+      if (alvoLev === 0) card.style.transform = '';
+    } else {
+      raf = requestAnimationFrame(animar);   // continua no próximo quadro
+    }
+  }
+  const iniciar = () => { if (!raf) raf = requestAnimationFrame(animar); };
+
+  card.addEventListener('pointerenter', (e) => {
+    if (e.pointerType !== 'mouse') return;
+    rect = card.getBoundingClientRect();     // medido em repouso: evita tremedeira
+    alvoLev = 1;
+    iniciar();
   });
-  card.addEventListener('mouseleave', () => (card.style.transform = ''));
+  card.addEventListener('pointermove', (e) => {
+    if (e.pointerType !== 'mouse' || !rect) return;
+    alvoRy = ((e.clientX - rect.left) / rect.width - 0.5) * 12;
+    alvoRx = ((e.clientY - rect.top) / rect.height - 0.5) * -12;
+    iniciar();
+  });
+  card.addEventListener('pointerleave', () => {
+    alvoRx = alvoRy = alvoLev = 0;
+    iniciar();
+  });
 });
 
 /* ===== Aparecer ao rolar a página ===== */
@@ -110,7 +147,7 @@ if (form) {
       { transform: 'translateY(-18px) scale(.97) rotate(-1.5deg)', offset: 0.35 },
       { transform: 'translateY(-36px) scale(.93) rotate(1deg)', offset: 0.65 },
       { transform: 'rotate(.6deg)' }
-    ], { duration: 900, easing: 'ease-in-out' });
+    ], { duration: 900, easing: 'cubic-bezier(.22, 1, .36, 1)' });
 
     // envelope voando
     const envelope = document.createElement('span');
@@ -176,17 +213,29 @@ document.querySelectorAll('h1, #projetos h2, #diplomas h2, #contato h2').forEach
   observador.observe(titulo);                           // anima quando aparecer na tela
 });
 
-/* ===== Foto: efeito 3D seguindo o mouse ===== */
+/* ===== Foto: parallax 3D suave ===== */
 const visual = document.querySelector('.hero-visual');
 
 if (visual) {
-  visual.addEventListener('mousemove', (e) => {
+  let x = 0, y = 0, alvoX = 0, alvoY = 0, raf = null;
+
+  function mover() {
+    x = lerp(x, alvoX, 0.08);
+    y = lerp(y, alvoY, 0.08);
+    visual.style.setProperty('--px', x.toFixed(3));
+    visual.style.setProperty('--py', y.toFixed(3));
+
+    const parado = Math.abs(x - alvoX) < 0.001 && Math.abs(y - alvoY) < 0.001;
+    raf = parado ? null : requestAnimationFrame(mover);
+  }
+  const iniciar = () => { if (!raf) raf = requestAnimationFrame(mover); };
+
+  visual.addEventListener('pointermove', (e) => {
+    if (e.pointerType !== 'mouse') return;
     const r = visual.getBoundingClientRect();
-    visual.style.setProperty('--px', ((e.clientX - r.left) / r.width - 0.5) * 2);
-    visual.style.setProperty('--py', ((e.clientY - r.top) / r.height - 0.5) * 2);
+    alvoX = ((e.clientX - r.left) / r.width - 0.5) * 2;
+    alvoY = ((e.clientY - r.top) / r.height - 0.5) * 2;
+    iniciar();
   });
-  visual.addEventListener('mouseleave', () => {
-    visual.style.setProperty('--px', 0);
-    visual.style.setProperty('--py', 0);
-  });
+  visual.addEventListener('pointerleave', () => { alvoX = alvoY = 0; iniciar(); });
 }
