@@ -786,6 +786,30 @@ nav a.ativo::after {
 .acoes a:hover::after {
     transform: scaleX(1);
 }
+/* texto escrevendo, ao lado do último projeto */
+.escrevendo {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 0 12px;
+}
+
+.escrevendo h3 {
+    font-size: clamp(38px, 4.4vw, 56px);
+    line-height: .95;
+    letter-spacing: -.02em;
+}
+
+.cursor {
+    display: inline-block;
+    width: .07em;
+    height: .8em;
+    margin-left: .08em;
+    background: currentColor;
+    vertical-align: -0.04em;
+    animation: cursor-pisca 1s steps(1) infinite;
+}
+@keyframes cursor-pisca { 50% { opacity: 0; } }
 
 /* ===== Diplomas ===== */
 .cert-section {

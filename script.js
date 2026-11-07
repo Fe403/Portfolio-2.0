@@ -280,3 +280,9 @@ linksMenu.forEach((a) => {
   const secao = document.querySelector(a.getAttribute('href'));
   if (secao) espiao.observe(secao);
 });
+
+document.querySelectorAll('h1, #projetos h2, #diplomas h2, #contato h2, .escrevendo h3').forEach((titulo) => {
+  dividirLetras(titulo);
+  titulo.classList.add('titulo-anima');
+  observador.observe(titulo);                           // anima quando aparecer na tela
+});
