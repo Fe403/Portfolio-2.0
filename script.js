@@ -2,12 +2,12 @@
 const intro = document.getElementById('intro');
 
 if (intro) {
-  const TEMPO_MINIMO = 2400;   // a intro fica pelo menos isso (em ms), mesmo se o site carregar rápido
+  const TEMPO_MINIMO = 2400;
   const inicio = performance.now();
 
   function terminarIntro() {
-    intro.classList.add('saindo');                 // some suavemente
-    document.body.classList.remove('carregando');  // libera o scroll e as animações do site
+    intro.classList.add('saindo');
+    document.body.classList.remove('carregando');
     setTimeout(() => intro.remove(), 1000);
   }
 
@@ -41,14 +41,12 @@ botaoTema.addEventListener('click', () => {
   const vaiFicarClaro = !document.body.classList.contains('claro');
   const reduzir = matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-  // navegador sem suporte (ou sem animação): troca direto
   if (!document.startViewTransition || reduzir) {
     aplicarTema(vaiFicarClaro);
     virarTexto();
     return;
   }
 
-  // o círculo nasce no centro do botão e cresce até cobrir a tela toda
   const r = botaoTema.getBoundingClientRect();
   const x = r.left + r.width / 2;
   const y = r.top + r.height / 2;
@@ -70,6 +68,7 @@ botaoTema.addEventListener('click', () => {
 
   transicao.finished.finally(() => document.documentElement.classList.remove('trocando-tema'));
 });
+
 /* ===== Onda ao clicar nos botões ===== */
 document.querySelectorAll('button, .btn, .links a').forEach((el) => {
   el.addEventListener('click', (e) => {
@@ -90,12 +89,15 @@ document.querySelectorAll('button, .btn, .links a').forEach((el) => {
 /* ===== Suavização: o valor "persegue" o alvo aos poucos ===== */
 const lerp = (a, b, t) => a + (b - a) * t;
 
-/* ===== Cards de projeto: inclinação suave ===== */
+/* ===== Cards de projeto: inclinação + luz que segue o mouse OU o dedo ===== */
 document.querySelectorAll('.projeto').forEach((card) => {
   let rect;
-  let rx = 0, ry = 0, lev = 0;                // onde o card está agora
-  let alvoRx = 0, alvoRy = 0, alvoLev = 0;    // para onde ele quer ir
+  let rx = 0, ry = 0, lev = 0;
+  let alvoRx = 0, alvoRy = 0, alvoLev = 0;
   let raf = null;
+  let ativo = false;   // mouse em cima ou dedo pressionado
+
+  const forcaTilt = (e) => (e.pointerType === 'mouse' ? 12 : 6); // dedo inclina menos
 
   function animar() {
     rx = lerp(rx, alvoRx, 0.12);
@@ -114,26 +116,57 @@ document.querySelectorAll('.projeto').forEach((card) => {
       raf = null;
       if (alvoLev === 0) card.style.transform = '';
     } else {
-      raf = requestAnimationFrame(animar);   // continua no próximo quadro
+      raf = requestAnimationFrame(animar);
     }
   }
   const iniciar = () => { if (!raf) raf = requestAnimationFrame(animar); };
 
-  card.addEventListener('pointerenter', (e) => {
-    if (e.pointerType !== 'mouse') return;
-    rect = card.getBoundingClientRect();     // medido em repouso: evita tremedeira
+  const entrar = () => {
+    ativo = true;
+    rect = card.getBoundingClientRect();
     alvoLev = 1;
     iniciar();
-  });
-  card.addEventListener('pointermove', (e) => {
-    if (e.pointerType !== 'mouse' || !rect) return;
-    alvoRy = ((e.clientX - rect.left) / rect.width - 0.5) * 12;
-    alvoRx = ((e.clientY - rect.top) / rect.height - 0.5) * -12;
+  };
+  const mover = (e) => {
+    if (!ativo || !rect) return;
+    const px = (e.clientX - rect.left) / rect.width;
+    const py = (e.clientY - rect.top) / rect.height;
+    const f = forcaTilt(e);
+    alvoRy = (px - 0.5) * f;
+    alvoRx = (py - 0.5) * -f;
+    card.style.setProperty('--mx', (px * 100).toFixed(1) + '%');
+    card.style.setProperty('--my', (py * 100).toFixed(1) + '%');
     iniciar();
-  });
-  card.addEventListener('pointerleave', () => {
+  };
+  const sair = () => {
+    ativo = false;
     alvoRx = alvoRy = alvoLev = 0;
     iniciar();
+  };
+
+  // mouse
+  card.addEventListener('pointerenter', (e) => {
+    if (e.pointerType === 'mouse') entrar();
+  });
+  card.addEventListener('pointermove', (e) => {
+    if (e.pointerType === 'mouse') mover(e);
+  });
+  card.addEventListener('pointerleave', (e) => {
+    if (e.pointerType === 'mouse') sair();
+  });
+
+  // toque: inclina enquanto o dedo está pressionado, volta ao soltar
+  card.addEventListener('pointerdown', (e) => {
+    if (e.pointerType !== 'mouse') entrar();
+  });
+  card.addEventListener('pointermove', (e) => {
+    if (e.pointerType !== 'mouse') mover(e);
+  });
+  card.addEventListener('pointerup', (e) => {
+    if (e.pointerType !== 'mouse') sair();
+  });
+  card.addEventListener('pointercancel', (e) => {
+    if (e.pointerType !== 'mouse') sair();
   });
 });
 
@@ -148,7 +181,7 @@ const observador = new IntersectionObserver((entradas) => {
 }, { threshold: 0.15 });
 
 document.querySelectorAll('.certificado').forEach((el, i) => {
-  el.style.setProperty('--atraso', `${i * 0.15}s`);   // um depois do outro
+  el.style.setProperty('--atraso', `${i * 0.15}s`);
   el.classList.add('revelar');
   observador.observe(el);
 });
@@ -165,7 +198,6 @@ if (form) {
   form.addEventListener('submit', (e) => {
     e.preventDefault();
 
-    // a carta "pula" ao enviar
     form.animate([
       { transform: 'rotate(.6deg)' },
       { transform: 'translateY(-18px) scale(.97) rotate(-1.5deg)', offset: 0.35 },
@@ -173,7 +205,6 @@ if (form) {
       { transform: 'rotate(.6deg)' }
     ], { duration: 900, easing: 'cubic-bezier(.22, 1, .36, 1)' });
 
-    // envelope voando
     const envelope = document.createElement('span');
     envelope.className = 'voando';
     envelope.textContent = '✉';
@@ -196,11 +227,11 @@ function dividirLetras(el) {
 
   function processar(no) {
     [...no.childNodes].forEach((filho) => {
-      if (filho.nodeType === 3) {                       // é um texto
+      if (filho.nodeType === 3) {
         const pedaco = document.createDocumentFragment();
         filho.textContent.split(/(\s+)/).forEach((parte) => {
           if (!parte) return;
-          if (/^\s+$/.test(parte)) {                    // espaço entre palavras
+          if (/^\s+$/.test(parte)) {
             pedaco.appendChild(document.createTextNode(' '));
             texto += ' ';
             return;
@@ -212,7 +243,7 @@ function dividirLetras(el) {
             const s = document.createElement('span');
             s.className = 'letra';
             s.textContent = letra;
-            s.style.setProperty('--i', indice++);       // posição da letra (para o atraso)
+            s.style.setProperty('--i', indice++);
             palavra.appendChild(s);
           });
           texto += parte;
@@ -222,18 +253,16 @@ function dividirLetras(el) {
       } else if (filho.nodeName === 'BR') {
         texto += ' ';
       } else {
-        processar(filho);                               // entra em <span> e similares
+        processar(filho);
       }
     });
   }
 
   processar(el);
-  el.setAttribute('aria-label', texto.trim());          // leitores de tela leem o título inteiro
+  el.setAttribute('aria-label', texto.trim());
 }
-                        
 
-
-/* ===== Foto: parallax 3D suave ===== */
+/* ===== Foto: parallax 3D suave (mouse e toque) ===== */
 const visual = document.querySelector('.hero-visual');
 
 if (visual) {
@@ -250,15 +279,22 @@ if (visual) {
   }
   const iniciar = () => { if (!raf) raf = requestAnimationFrame(mover); };
 
-  visual.addEventListener('pointermove', (e) => {
-    if (e.pointerType !== 'mouse') return;
+  const atualizarAlvo = (clientX, clientY) => {
     const r = visual.getBoundingClientRect();
-    alvoX = ((e.clientX - r.left) / r.width - 0.5) * 2;
-    alvoY = ((e.clientY - r.top) / r.height - 0.5) * 2;
+    alvoX = ((clientX - r.left) / r.width - 0.5) * 2;
+    alvoY = ((clientY - r.top) / r.height - 0.5) * 2;
     iniciar();
+  };
+
+  visual.addEventListener('pointermove', (e) => {
+    // no toque, só move se estiver pressionando (evita "pular" ao rolar)
+    if (e.pointerType !== 'mouse' && e.buttons === 0) return;
+    atualizarAlvo(e.clientX, e.clientY);
   });
   visual.addEventListener('pointerleave', () => { alvoX = alvoY = 0; iniciar(); });
+  visual.addEventListener('pointerup', () => { alvoX = alvoY = 0; iniciar(); });
 }
+
 /* ===== Menu: marca a seção atual ===== */
 const linksMenu = document.querySelectorAll('nav a');
 
@@ -270,7 +306,7 @@ const espiao = new IntersectionObserver((entradas) => {
       );
     }
   });
-}, { rootMargin: '-45% 0px -50% 0px' });   // só conta a faixa do meio da tela
+}, { rootMargin: '-45% 0px -50% 0px' });
 
 linksMenu.forEach((a) => {
   const secao = document.querySelector(a.getAttribute('href'));
@@ -280,7 +316,7 @@ linksMenu.forEach((a) => {
 document.querySelectorAll('h1, #projetos h2, #diplomas h2, #contato h2, .escrevendo h3').forEach((titulo) => {
   dividirLetras(titulo);
   titulo.classList.add('titulo-anima');
-  observador.observe(titulo);                           // anima quando aparecer na tela
+  observador.observe(titulo);
 });
 
 /* ===== Print que não carregou: some e deixa o fundo listrado ===== */
@@ -289,3 +325,13 @@ document.querySelectorAll('.projeto-arte img').forEach((img) => {
   if (img.complete && img.naturalWidth === 0) falhou();
   else img.addEventListener('error', falhou);
 });
+
+/* ===== Rede de segurança para a foto do hero ===== */
+const foto = document.querySelector('.foto img');
+if (foto) {
+  foto.addEventListener('error', () => {
+    foto.style.background = 'repeating-linear-gradient(135deg, #333 0 2px, transparent 2px 12px)';
+    foto.removeAttribute('src');
+    foto.alt = '';
+  });
+}
