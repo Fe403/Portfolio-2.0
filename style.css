@@ -619,15 +619,6 @@ nav a.ativo::after {
     border-bottom: 1px solid #2a2a2a;
 }
 
-.arte-contida img {
-    object-fit: contain;
-    padding: 22px;
-    filter: none;   /* sempre colorido, proposital */
-}
-.projeto:hover .arte-contida img {
-    transform: scale(1.05);
-}
-
 .projeto-arte img {
     width: 100%;
     height: 100%;
@@ -783,6 +774,46 @@ nav a.ativo::after {
     line-height: .95;
     letter-spacing: -.02em;
 }
+
+/* ===== Selo de status do projeto ===== */
+.status {
+    position: absolute;
+    right: 14px;
+    bottom: 12px;
+    z-index: 3;
+    padding: 4px 10px;
+    border: 2px solid #0d0d0d;
+    box-shadow: 3px 3px 0 rgba(0, 0, 0, .45);
+    font: 900 11px 'Barlow Condensed', sans-serif;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    transform: rotate(-4deg);
+    transition: transform .35s var(--ease-spring);
+    pointer-events: none;
+}
+
+.projeto:hover .status {
+    transform: rotate(2deg) scale(1.06);
+}
+
+.status-pronto {
+    color: #063a1c;
+    background: #7ee2a8;
+}
+
+.status-beta {
+    color: #3a2a00;
+    background: #ffd166;
+}
+
+.status-dev {
+    color: #f7f7f5;
+    background: #5b6bff;
+}
+
+body.claro .status-pronto { background: #4fcb86; }
+body.claro .status-beta   { background: #f0b429; }
+body.claro .status-dev    { background: #3f4fe0; }
 
 /* ===== Diplomas ===== */
 .cert-section {
@@ -1294,7 +1325,6 @@ form.revelar.visivel {
         width: calc(100% - 32px);
     }
 
-    /* menu do topo: some; topbar fica só logo + tema */
     nav { display: none; }
     .topbar {
         grid-template-columns: 1fr auto;
@@ -1336,9 +1366,7 @@ form.revelar.visivel {
         font-size: 14px;
         margin: 24px 0 14px;
     }
-    .intro {
-        font-size: 14px;
-    }
+    .intro { font-size: 14px; }
 
     .btn {
         padding: 12px 18px;
@@ -1346,7 +1374,6 @@ form.revelar.visivel {
         margin: 24px 8px 0 0;
     }
 
-    /* hero visual */
     .hero-visual {
         width: 88%;
         padding: 8px;
@@ -1379,7 +1406,6 @@ form.revelar.visivel {
         padding: 6px 10px;
     }
 
-    /* grade: 1 coluna no celular */
     .grade {
         grid-template-columns: 1fr;
         gap: 18px;
@@ -1390,7 +1416,15 @@ form.revelar.visivel {
     .projeto-corpo > p { min-height: 0; }
     .escrevendo { padding: 20px 4px 0; }
 
-    /* certificados */
+    /* selo de status no mobile */
+    .status {
+        font-size: 9px;
+        padding: 3px 8px;
+        right: 10px;
+        bottom: 10px;
+        letter-spacing: 1px;
+    }
+
     .cert-section {
         clip-path: polygon(0 1.5%, 100% 0, 100% 98.5%, 0 100%);
     }
@@ -1404,7 +1438,6 @@ form.revelar.visivel {
     }
     .selo { top: 50px; right: 18px; }
 
-    /* contato */
     .contato-grid { gap: 48px; }
     .contato-grid h2 { margin-bottom: 22px; }
     .texto { margin-bottom: 22px; }
@@ -1429,7 +1462,6 @@ form.revelar.visivel {
         text-align: center;
     }
 
-    /* rodapé */
     footer .conteudo {
         flex-direction: column;
         align-items: flex-start;
@@ -1453,10 +1485,8 @@ form.revelar.visivel {
     .acoes a { padding: 6px 10px; }
 }
 
-
 /* ===== Melhora toque em dispositivos touch ===== */
 @media (hover: none) {
-    /* sem hover: não trava no estado "hover"; mantém tudo acessível */
     .projeto:hover .projeto-arte img { transform: none; }
     .projeto:hover::after { opacity: 0; }
     .projeto:hover .projeto-corpo::before { transform: scaleX(0); }
@@ -1467,7 +1497,13 @@ form.revelar.visivel {
         transform: scale(1.03);
         filter: none;
     }
+
+    /* no toque, o selo de status não muda (o :hover não existe) */
+    .projeto:hover .status {
+        transform: rotate(-4deg) scale(1);
+    }
 }
+
 /* ===== Quem prefere menos movimento no sistema ===== */
 @media (prefers-reduced-motion: reduce) {
     :where(header, main, footer) *,
