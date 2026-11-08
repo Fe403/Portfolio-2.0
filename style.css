@@ -308,6 +308,11 @@ h1.titulo-anima {
     width: auto;
     transition: transform .4s var(--ease-spring);
 }
+/* logo redonda: corta os cantos quadrados */
+.logo,
+.intro-logo {
+    clip-path: circle(46%);
+}
 
 .brand:hover .logo {
     transform: rotate(-6deg) scale(1.08);
@@ -813,6 +818,105 @@ nav a.ativo::after {
     font-size: clamp(38px, 4.4vw, 56px);
     line-height: .95;
     letter-spacing: -.02em;
+}
+/* ===== Projetos: visual novo ===== */
+
+/* moldura de navegador no print */
+.projeto-arte { padding-top: 28px; }
+
+.projeto-arte::before {
+    content: '';
+    position: absolute;
+    inset: 0 0 auto 0;
+    z-index: 2;
+    height: 28px;
+    background:
+        radial-gradient(circle 4px at 14px 50%, #8a8a8a 96%, transparent),
+        radial-gradient(circle 4px at 28px 50%, #6b6b6b 96%, transparent),
+        radial-gradient(circle 4px at 42px 50%, #4d4d4d 96%, transparent),
+        #0d0d0d;
+    border-bottom: 1px solid #2a2a2a;
+}
+
+/* o número vira a "aba" da barra */
+.projeto-arte .numero {
+    inset: 0 14px auto auto;
+    z-index: 3;
+    display: flex;
+    align-items: center;
+    height: 28px;
+    font-size: 11px;
+    letter-spacing: 2px;
+    color: #999;
+    text-shadow: none;
+}
+.projeto-arte .numero::before { content: 'PROJETO '; }
+
+/* print em preto e branco; colore no hover (logos coloridas ficam como estão) */
+.projeto-arte img {
+    filter: grayscale(1) contrast(1.05);
+    transition: transform .7s var(--ease-out), filter .6s var(--ease-out);
+}
+.projeto:hover .projeto-arte img { filter: none; }
+.arte-contida img { filter: none; }
+
+/* luz que segue o mouse (o JS define --mx e --my) */
+.projeto { position: relative; }
+.projeto::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: 3;
+    pointer-events: none;
+    opacity: 0;
+    background: radial-gradient(240px circle at var(--mx, 50%) var(--my, 50%),
+        color-mix(in srgb, var(--texto) 12%, transparent), transparent 70%);
+    transition: opacity .4s var(--ease-out);
+}
+.projeto:hover::after { opacity: 1; }
+
+/* linha que cresce no topo do texto */
+.projeto-corpo { position: relative; }
+.projeto-corpo::before {
+    content: '';
+    position: absolute;
+    top: -1px;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: var(--texto);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform .6s var(--ease-out);
+}
+.projeto:hover .projeto-corpo::before { transform: scaleX(1); }
+
+/* tags e botão do GitHub reagem */
+.tag { transition: background .25s var(--ease-out), color .25s var(--ease-out); }
+.tag:hover { background: var(--texto); color: var(--bg); }
+
+.acoes a {
+    padding: 7px 12px;
+    border: 1px solid var(--texto);
+    transition: background .25s var(--ease-out), color .25s var(--ease-out);
+}
+.acoes a:hover { background: var(--texto); color: var(--bg); }
+.acoes a::after { display: none; }   /* sem o sublinhado antigo */
+
+/* selo de status (opcional, escolha os cards que quiser) */
+.status {
+    position: absolute;
+    right: 14px;
+    bottom: 12px;
+    z-index: 3;
+    padding: 4px 10px;
+    color: #0d0d0d;
+    background: #d9d9d9;
+    border: 2px solid #0d0d0d;
+    box-shadow: 3px 3px 0 #6b6b6b;
+    font: 900 11px 'Barlow Condensed', sans-serif;
+    letter-spacing: 2px;
+    transform: rotate(-4deg);
 }
 
 /* ===== Diplomas ===== */

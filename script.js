@@ -282,3 +282,10 @@ document.querySelectorAll('h1, #projetos h2, #diplomas h2, #contato h2, .escreve
   titulo.classList.add('titulo-anima');
   observador.observe(titulo);                           // anima quando aparecer na tela
 });
+
+/* ===== Print que não carregou: some e deixa o fundo listrado ===== */
+document.querySelectorAll('.projeto-arte img').forEach((img) => {
+  const falhou = () => img.remove();
+  if (img.complete && img.naturalWidth === 0) falhou();
+  else img.addEventListener('error', falhou);
+});
