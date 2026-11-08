@@ -31,6 +31,7 @@ body.claro {
 
 html {
     scroll-behavior: smooth;
+    scroll-padding-top: 90px;
 }
 
 body {
@@ -657,15 +658,17 @@ nav a.ativo::after {
 .cabecalho {
     display: flex;
     justify-content: space-between;
-    align-items: flex-end;
+    align-items: flex-start;
     gap: 40px;
     margin-bottom: 52px;
 }
 
 .cabecalho>p {
-    max-width: 340px;
+    max-width: 320px;
     color: var(--cinza);
-    font-size: 13px;
+    font-size: 14px;
+    line-height: 1.6;
+    text-align: right;
 }
 
 .grade {
@@ -811,17 +814,6 @@ nav a.ativo::after {
     line-height: .95;
     letter-spacing: -.02em;
 }
-
-.cursor {
-    display: inline-block;
-    width: .07em;
-    height: .8em;
-    margin-left: .08em;
-    background: currentColor;
-    vertical-align: -0.04em;
-    animation: cursor-pisca 1s steps(1) infinite;
-}
-@keyframes cursor-pisca { 50% { opacity: 0; } }
 
 /* ===== Diplomas ===== */
 .cert-section {
@@ -1320,6 +1312,11 @@ form.revelar.visivel {
         align-items: flex-start;
     }
 
+    .cabecalho > p {
+        text-align: left;
+        max-width: 100%;
+    }
+
     .cert-section .cabecalho {
         align-items: flex-start;
         position: relative;
@@ -1351,7 +1348,6 @@ form.revelar.visivel {
 }
 
 /* ===== Quem prefere menos movimento no sistema ===== */
-/* só o site é simplificado; a intro (indicador de carregamento) continua animada */
 @media (prefers-reduced-motion: reduce) {
     :where(header, main, footer) *,
     :where(header, main, footer) *::before,
