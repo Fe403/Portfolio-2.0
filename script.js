@@ -230,12 +230,8 @@ function dividirLetras(el) {
   processar(el);
   el.setAttribute('aria-label', texto.trim());          // leitores de tela leem o título inteiro
 }
+                        
 
-document.querySelectorAll('h1, #projetos h2, #diplomas h2, #contato h2').forEach((titulo) => {
-  dividirLetras(titulo);
-  titulo.classList.add('titulo-anima');
-  observador.observe(titulo);                           // anima quando aparecer na tela
-});
 
 /* ===== Foto: parallax 3D suave ===== */
 const visual = document.querySelector('.hero-visual');
