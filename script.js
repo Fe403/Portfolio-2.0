@@ -254,3 +254,127 @@ if (form) {
     }
   });
 }
+
+/* ===== Títulos: separar em letras e animar ===== */
+function dividirLetras(el) {
+  let indice = 0;
+  let texto = '';
+
+  function processar(no) {
+    [...no.childNodes].forEach((filho) => {
+      if (filho.nodeType === 3) {
+        const pedaco = document.createDocumentFragment();
+        filho.textContent.split(/(\s+)/).forEach((parte) => {
+          if (!parte) return;
+          if (/^\s+$/.test(parte)) {
+            pedaco.appendChild(document.createTextNode(' '));
+            texto += ' ';
+            return;
+          }
+          const palavra = document.createElement('span');
+          palavra.className = 'palavra';
+          palavra.setAttribute('aria-hidden', 'true');
+          [...parte].forEach((letra) => {
+            const s = document.createElement('span');
+            s.className = 'letra';
+            s.textContent = letra;
+            s.style.setProperty('--i', indice++);
+            palavra.appendChild(s);
+          });
+          texto += parte;
+          pedaco.appendChild(palavra);
+        });
+        no.replaceChild(pedaco, filho);
+      } else if (filho.nodeName === 'BR') {
+        texto += ' ';
+      } else {
+        processar(filho);
+      }
+    });
+  }
+
+  processar(el);
+  el.setAttribute('aria-label', texto.trim());
+}
+
+document.querySelectorAll('h1, #projetos h2, #diplomas h2, #contato h2, .escrevendo h3').forEach((titulo) => {
+  dividirLetras(titulo);
+  titulo.classList.add('titulo-anima');
+  observador.observe(titulo);
+});
+
+/* ===== Foto: parallax 3D suave (mouse e toque) ===== */
+const visual = document.querySelector('.hero-visual');
+
+if (visual) {
+  let x = 0, y = 0, alvoX = 0, alvoY = 0, raf = null;
+
+  function mover() {
+    x = lerp(x, alvoX, 0.08);
+    y = lerp(y, alvoY, 0.08);
+    visual.style.setProperty('--px', x.toFixed(3));
+    visual.style.setProperty('--py', y.toFixed(3));
+
+    const parado = Math.abs(x - alvoX) < 0.001 && Math.abs(y - alvoY) < 0.001;
+    raf = parado ? null : requestAnimationFrame(mover);
+  }
+  const iniciar = () => { if (!raf) raf = requestAnimationFrame(mover); };
+
+  const atualizarAlvo = (clientX, clientY) => {
+    const r = visual.getBoundingClientRect();
+    alvoX = ((clientX - r.left) / r.width - 0.5) * 2;
+    alvoY = ((clientY - r.top) / r.height - 0.5) * 2;
+    iniciar();
+  };
+
+  visual.addEventListener('pointermove', (e) => {
+    if (e.pointerType !== 'mouse' && e.buttons === 0) return;
+    atualizarAlvo(e.clientX, e.clientY);
+  });
+  visual.addEventListener('pointerleave', () => { alvoX = alvoY = 0; iniciar(); });
+  visual.addEventListener('pointerup', () => { alvoX = alvoY = 0; iniciar(); });
+}
+
+/* ===== Menu: marca a seção atual ===== */
+const linksMenu = document.querySelectorAll('nav a');
+
+const espiao = new IntersectionObserver((entradas) => {
+  entradas.forEach((entrada) => {
+    if (entrada.isIntersecting) {
+      linksMenu.forEach((a) =>
+        a.classList.toggle('ativo', a.getAttribute('href') === '#' + entrada.target.id)
+      );
+    }
+  });
+}, { rootMargin: '-45% 0px -50% 0px' });
+
+linksMenu.forEach((a) => {
+  const secao = document.querySelector(a.getAttribute('href'));
+  if (secao) espiao.observe(secao);
+});
+
+/* ===== Carrossel de linguagens: duplica a lista para o loop ficar contínuo ===== */
+const trilha = document.querySelector('.carrossel .trilha');
+
+if (trilha && trilha.firstElementChild) {
+  const copia = trilha.firstElementChild.cloneNode(true);
+  copia.setAttribute('aria-hidden', 'true');
+  trilha.appendChild(copia);
+}
+
+/* ===== Print que não carregou: some e deixa o fundo listrado ===== */
+document.querySelectorAll('.projeto-arte img').forEach((img) => {
+  const falhou = () => img.remove();
+  if (img.complete && img.naturalWidth === 0) falhou();
+  else img.addEventListener('error', falhou);
+});
+
+/* ===== Rede de segurança para a foto do hero ===== */
+const fotoHero = document.querySelector('.foto img');
+if (fotoHero) {
+  fotoHero.addEventListener('error', () => {
+    fotoHero.style.background = 'repeating-linear-gradient(135deg, #333 0 2px, transparent 2px 12px)';
+    fotoHero.removeAttribute('src');
+    fotoHero.alt = '';
+  });
+}

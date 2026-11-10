@@ -1845,3 +1845,120 @@ form.revelar.visivel {
         opacity: 1;
     }
 }
+
+/* ===== Hero: coluna da foto + carrossel ===== */
+.hero-lado {
+    width: min(430px, 100%);
+    margin-left: auto;
+}
+
+/* o tamanho agora é controlado pelo .hero-lado */
+.hero-lado .hero-visual {
+    width: 100%;
+    margin: 0;
+}
+
+/* ===== Botão de currículo ===== */
+.seta-baixo {
+    display: inline-block;
+    margin-left: 4px;
+    transition: transform .35s var(--ease-out);
+}
+
+.btn-download:hover .seta-baixo {
+    transform: translateY(4px);
+}
+
+/* ===== Carrossel de linguagens ===== */
+.carrossel {
+    margin: 6px 20px 0;
+    padding-block: 14px;
+    overflow: hidden;
+    border-block: 2px solid var(--texto);
+    -webkit-mask-image: linear-gradient(90deg, transparent, #000 12%, #000 88%, transparent);
+    mask-image: linear-gradient(90deg, transparent, #000 12%, #000 88%, transparent);
+}
+
+.trilha {
+    display: flex;
+    width: max-content;
+    animation: carrossel 30s linear infinite;
+    will-change: transform;
+}
+
+.carrossel:hover .trilha {
+    animation-play-state: paused;
+}
+
+.grupo {
+    display: flex;
+    flex-shrink: 0;
+}
+
+.tec {
+    display: flex;
+    align-items: center;
+    padding-left: 20px;
+    color: var(--texto);
+    font: 800 20px 'Barlow Condensed', sans-serif;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    white-space: nowrap;
+    transition: color .3s var(--ease-out);
+}
+
+/* o separador entre uma tecnologia e outra */
+.tec::after {
+    content: '✦';
+    margin-left: 20px;
+    color: var(--cinza);
+    font-size: 10px;
+}
+
+/* passou o mouse: a palavra fica só com contorno, igual aos títulos */
+.tec:hover {
+    color: transparent;
+    -webkit-text-stroke: 1px var(--texto);
+}
+
+/* anda metade da trilha (= um grupo inteiro) e recomeça sem pulo */
+@keyframes carrossel {
+    to { transform: translateX(-50%); }
+}
+
+/* ajustes por tamanho de tela */
+@media (max-width: 1100px) {
+    .hero-lado { width: min(380px, 100%); }
+    .carrossel { margin-inline: 16px; }
+}
+
+@media (max-width: 900px) {
+    .hero-lado { width: min(420px, 92%); margin: 0 auto; }
+    .carrossel { margin-inline: 12px; }
+}
+
+@media (max-width: 800px) {
+    .hero-lado { width: 88%; }
+    .carrossel { margin-inline: 8px; }
+    .tec { font-size: 17px; padding-left: 16px; }
+    .tec::after { margin-left: 16px; }
+}
+
+@media (max-width: 400px) {
+    .hero-lado { width: 94%; }
+}
+
+/* quem prefere menos movimento: lista parada, em várias linhas */
+@media (prefers-reduced-motion: reduce) {
+    .carrossel {
+        -webkit-mask-image: none;
+        mask-image: none;
+    }
+    .trilha {
+        width: auto;
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+    .trilha .grupo[aria-hidden="true"] { display: none; }
+    .grupo { flex-wrap: wrap; justify-content: center; row-gap: 8px; }
+}
