@@ -1268,6 +1268,18 @@ form button:hover span:not(.onda) {
     font-size: 48px;
     pointer-events: none;
 }
+.form-status {
+    min-height: 1.4em;
+    margin-top: 14px;
+    color: var(--cinza);
+    font-size: 12px;
+}
+.form-status.erro { color: #ff6b6b; }
+
+form button:disabled {
+    opacity: .6;
+    cursor: wait;
+}
 
 /* ===== Footer ===== */
 footer {

@@ -193,11 +193,18 @@ if (form) {
   form.classList.add('revelar');
   observador.observe(form);
 
-  const textoEnviar = form.querySelector('button span:not(.onda)');
+  const botao = form.querySelector('button[type="submit"]');
+  const textoEnviar = botao.querySelector('span:not(.onda)');
+  const aviso = form.querySelector('.form-status');
+  let enviando = false;
 
-  form.addEventListener('submit', (e) => {
-    e.preventDefault();
+  function mostrarAviso(mensagem, erro = false) {
+    aviso.textContent = mensagem;
+    aviso.classList.toggle('erro', erro);
+  }
 
+  function animarSucesso() {
+    // a carta "pula"
     form.animate([
       { transform: 'rotate(.6deg)' },
       { transform: 'translateY(-18px) scale(.97) rotate(-1.5deg)', offset: 0.35 },
@@ -205,6 +212,7 @@ if (form) {
       { transform: 'rotate(.6deg)' }
     ], { duration: 900, easing: 'cubic-bezier(.22, 1, .36, 1)' });
 
+    // envelope voando
     const envelope = document.createElement('span');
     envelope.className = 'voando';
     envelope.textContent = '✉';
@@ -213,125 +221,36 @@ if (form) {
       { transform: 'translate(-50%, -50%) scale(.6) rotate(0deg)', opacity: 1 },
       { transform: 'translate(40vw, -60vh) scale(1.6) rotate(25deg)', opacity: 0 }
     ], { duration: 1100, easing: 'ease-in' }).onfinish = () => envelope.remove();
-
-    textoEnviar.textContent = 'Mensagem enviada! ✓';
-    form.reset();
-    setTimeout(() => (textoEnviar.textContent = 'Enviar mensagem →'), 3000);
-  });
-}
-
-/* ===== Títulos: separar em letras e animar ===== */
-function dividirLetras(el) {
-  let indice = 0;
-  let texto = '';
-
-  function processar(no) {
-    [...no.childNodes].forEach((filho) => {
-      if (filho.nodeType === 3) {
-        const pedaco = document.createDocumentFragment();
-        filho.textContent.split(/(\s+)/).forEach((parte) => {
-          if (!parte) return;
-          if (/^\s+$/.test(parte)) {
-            pedaco.appendChild(document.createTextNode(' '));
-            texto += ' ';
-            return;
-          }
-          const palavra = document.createElement('span');
-          palavra.className = 'palavra';
-          palavra.setAttribute('aria-hidden', 'true');
-          [...parte].forEach((letra) => {
-            const s = document.createElement('span');
-            s.className = 'letra';
-            s.textContent = letra;
-            s.style.setProperty('--i', indice++);
-            palavra.appendChild(s);
-          });
-          texto += parte;
-          pedaco.appendChild(palavra);
-        });
-        no.replaceChild(pedaco, filho);
-      } else if (filho.nodeName === 'BR') {
-        texto += ' ';
-      } else {
-        processar(filho);
-      }
-    });
   }
 
-  processar(el);
-  el.setAttribute('aria-label', texto.trim());
-}
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    if (enviando) return;
 
-/* ===== Foto: parallax 3D suave (mouse e toque) ===== */
-const visual = document.querySelector('.hero-visual');
+    enviando = true;
+    botao.disabled = true;
+    textoEnviar.textContent = 'Enviando...';
+    mostrarAviso('');
 
-if (visual) {
-  let x = 0, y = 0, alvoX = 0, alvoY = 0, raf = null;
+    try {
+      const resposta = await fetch(form.action, {
+        method: 'POST',
+        body: new FormData(form),
+        headers: { Accept: 'application/json' }
+      });
+      if (!resposta.ok) throw new Error('falhou');
 
-  function mover() {
-    x = lerp(x, alvoX, 0.08);
-    y = lerp(y, alvoY, 0.08);
-    visual.style.setProperty('--px', x.toFixed(3));
-    visual.style.setProperty('--py', y.toFixed(3));
-
-    const parado = Math.abs(x - alvoX) < 0.001 && Math.abs(y - alvoY) < 0.001;
-    raf = parado ? null : requestAnimationFrame(mover);
-  }
-  const iniciar = () => { if (!raf) raf = requestAnimationFrame(mover); };
-
-  const atualizarAlvo = (clientX, clientY) => {
-    const r = visual.getBoundingClientRect();
-    alvoX = ((clientX - r.left) / r.width - 0.5) * 2;
-    alvoY = ((clientY - r.top) / r.height - 0.5) * 2;
-    iniciar();
-  };
-
-  visual.addEventListener('pointermove', (e) => {
-    // no toque, só move se estiver pressionando (evita "pular" ao rolar)
-    if (e.pointerType !== 'mouse' && e.buttons === 0) return;
-    atualizarAlvo(e.clientX, e.clientY);
-  });
-  visual.addEventListener('pointerleave', () => { alvoX = alvoY = 0; iniciar(); });
-  visual.addEventListener('pointerup', () => { alvoX = alvoY = 0; iniciar(); });
-}
-
-/* ===== Menu: marca a seção atual ===== */
-const linksMenu = document.querySelectorAll('nav a');
-
-const espiao = new IntersectionObserver((entradas) => {
-  entradas.forEach((entrada) => {
-    if (entrada.isIntersecting) {
-      linksMenu.forEach((a) =>
-        a.classList.toggle('ativo', a.getAttribute('href') === '#' + entrada.target.id)
-      );
+      animarSucesso();
+      textoEnviar.textContent = 'Mensagem enviada! ✓';
+      mostrarAviso('Recebi sua mensagem! Respondo no seu e-mail assim que possível.');
+      form.reset();
+    } catch (erro) {
+      textoEnviar.textContent = 'Tentar de novo';
+      mostrarAviso('Não consegui enviar agora. Tente de novo ou me chame em andrefellipe676@gmail.com.', true);
+    } finally {
+      enviando = false;
+      botao.disabled = false;
+      setTimeout(() => (textoEnviar.textContent = 'Enviar mensagem →'), 3500);
     }
-  });
-}, { rootMargin: '-45% 0px -50% 0px' });
-
-linksMenu.forEach((a) => {
-  const secao = document.querySelector(a.getAttribute('href'));
-  if (secao) espiao.observe(secao);
-});
-
-document.querySelectorAll('h1, #projetos h2, #diplomas h2, #contato h2, .escrevendo h3').forEach((titulo) => {
-  dividirLetras(titulo);
-  titulo.classList.add('titulo-anima');
-  observador.observe(titulo);
-});
-
-/* ===== Print que não carregou: some e deixa o fundo listrado ===== */
-document.querySelectorAll('.projeto-arte img').forEach((img) => {
-  const falhou = () => img.remove();
-  if (img.complete && img.naturalWidth === 0) falhou();
-  else img.addEventListener('error', falhou);
-});
-
-/* ===== Rede de segurança para a foto do hero ===== */
-const foto = document.querySelector('.foto img');
-if (foto) {
-  foto.addEventListener('error', () => {
-    foto.style.background = 'repeating-linear-gradient(135deg, #333 0 2px, transparent 2px 12px)';
-    foto.removeAttribute('src');
-    foto.alt = '';
   });
 }
