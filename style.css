@@ -1973,3 +1973,25 @@ form.revelar.visivel {
         grid-template-columns: minmax(0, 1fr);
     }
 }
+
+/* ===== Foco visível (quem navega com a tecla Tab) ===== */
+a:focus-visible,
+button:focus-visible {
+    outline: 2px dashed var(--texto);
+    outline-offset: 4px;
+}
+
+.acoes a:focus-visible,
+.links a:focus-visible {
+    outline-offset: 2px;
+}
+
+/* ===== Intro: pula quando já foi vista nesta sessão ===== */
+.sem-intro #intro {
+    display: none;
+}
+
+.sem-intro body.carregando {
+    overflow-x: hidden;
+    overflow-y: auto;
+}

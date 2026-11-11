@@ -2,22 +2,32 @@
 const intro = document.getElementById('intro');
 
 if (intro) {
-  const TEMPO_MINIMO = 2400;
-  const inicio = performance.now();
+  // a intro só aparece na primeira visita da sessão (por aba)
+  let jaViu = false;
+  try { jaViu = sessionStorage.getItem('intro-visto') === '1'; } catch (e) {}
 
-  function terminarIntro() {
-    intro.classList.add('saindo');
+  if (jaViu) {
+    intro.remove();
     document.body.classList.remove('carregando');
-    setTimeout(() => intro.remove(), 1000);
-  }
+  } else {
+    const TEMPO_MINIMO = 1200;
+    const inicio = performance.now();
 
-  function quandoPronto() {
-    const restante = Math.max(0, TEMPO_MINIMO - (performance.now() - inicio));
-    setTimeout(terminarIntro, restante);
-  }
+    function terminarIntro() {
+      try { sessionStorage.setItem('intro-visto', '1'); } catch (e) {}
+      intro.classList.add('saindo');
+      document.body.classList.remove('carregando');
+      setTimeout(() => intro.remove(), 1000);
+    }
 
-  if (document.readyState === 'complete') quandoPronto();
-  else window.addEventListener('load', quandoPronto);
+    function quandoPronto() {
+      const restante = Math.max(0, TEMPO_MINIMO - (performance.now() - inicio));
+      setTimeout(terminarIntro, restante);
+    }
+
+    if (document.readyState === 'complete') quandoPronto();
+    else window.addEventListener('load', quandoPronto);
+  }
 }
 
 /* ===== Tema escuro / claro ===== */
