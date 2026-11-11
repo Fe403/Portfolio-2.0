@@ -353,21 +353,6 @@ linksMenu.forEach((a) => {
   if (secao) espiao.observe(secao);
 });
 
-/* ===== Carrossel de linguagens: duplica a lista para o loop ficar contínuo ===== */
-const trilha = document.querySelector('.carrossel .trilha');
-
-if (trilha && trilha.firstElementChild) {
-  const copia = trilha.firstElementChild.cloneNode(true);
-  copia.setAttribute('aria-hidden', 'true');
-  trilha.appendChild(copia);
-}
-
-/* ===== Print que não carregou: some e deixa o fundo listrado ===== */
-document.querySelectorAll('.projeto-arte img').forEach((img) => {
-  const falhou = () => img.remove();
-  if (img.complete && img.naturalWidth === 0) falhou();
-  else img.addEventListener('error', falhou);
-});
 
 /* ===== Rede de segurança para a foto do hero ===== */
 const fotoHero = document.querySelector('.foto img');
