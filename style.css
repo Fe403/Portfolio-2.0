@@ -1948,17 +1948,28 @@ form.revelar.visivel {
     .hero-lado { width: 94%; }
 }
 
-/* quem prefere menos movimento: lista parada, em várias linhas */
+/* o carrossel anda sempre (é lento e decorativo) */
 @media (prefers-reduced-motion: reduce) {
-    .carrossel {
-        -webkit-mask-image: none;
-        mask-image: none;
-    }
     .trilha {
-        width: auto;
-        flex-wrap: wrap;
-        justify-content: center;
+        animation: carrossel 40s linear infinite !important;
     }
-    .trilha .grupo[aria-hidden="true"] { display: none; }
-    .grupo { flex-wrap: wrap; justify-content: center; row-gap: 8px; }
+
+    .carrossel:hover .trilha {
+        animation-play-state: paused !important;
+    }
+}
+/* ===== Corrige a coluna da foto: o carrossel não pode alargar a grade ===== */
+#inicio {
+    grid-template-columns: minmax(0, 1.08fr) minmax(0, .82fr);
+}
+
+.hero-texto,
+.hero-lado {
+    min-width: 0;
+}
+
+@media (max-width: 900px) {
+    #inicio {
+        grid-template-columns: minmax(0, 1fr);
+    }
 }
