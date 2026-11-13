@@ -2257,3 +2257,47 @@ main:focus {
         text-align: left;
     }
 }
+
+/* ===== Sobre mim: números sem estourar o quadrado no celular ===== */
+.sobre-numeros div {
+    min-width: 0;
+}
+
+.sobre-numeros span {
+    overflow-wrap: anywhere;
+}
+
+@media (max-width: 800px) {
+    .sobre-numeros {
+        gap: 8px;
+    }
+
+    .sobre-numeros div {
+        padding: 12px 8px;
+    }
+
+    .sobre-numeros span {
+        font-size: 10px;
+        letter-spacing: 1px;
+    }
+}
+
+/* telas bem estreitas: cada número vira uma linha (número à esquerda, nome à direita) */
+@media (max-width: 480px) {
+    .sobre-numeros {
+        grid-template-columns: 1fr;
+    }
+
+    .sobre-numeros div {
+        flex-direction: row;
+        align-items: baseline;
+        justify-content: space-between;
+        padding: 12px 14px;
+    }
+
+    .sobre-numeros span {
+        margin-top: 0;
+        font-size: 11px;
+        letter-spacing: 2px;
+    }
+}
