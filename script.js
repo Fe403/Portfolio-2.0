@@ -198,7 +198,7 @@ const observador = new IntersectionObserver((entradas) => {
   });
 }, { threshold: 0.15 });
 
-document.querySelectorAll('.certificado').forEach((el, i) => {
+document.querySelectorAll('.certificado, .sobre-card').forEach((el, i) => {
   el.style.setProperty('--atraso', `${i * 0.15}s`);
   el.classList.add('revelar');
   observador.observe(el);
@@ -334,7 +334,7 @@ function dividirLetras(el) {
   el.setAttribute('aria-label', texto.trim());
 }
 
-document.querySelectorAll('h1, #projetos h2, #diplomas h2, #contato h2, .escrevendo h3').forEach((titulo) => {
+document.querySelectorAll('h1, #sobre h2, #projetos h2, #diplomas h2, #contato h2, .escrevendo h3').forEach((titulo) => {
   dividirLetras(titulo);
   titulo.classList.add('titulo-anima');
   observador.observe(titulo);

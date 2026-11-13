@@ -2145,3 +2145,115 @@ main:focus {
         transition-duration: .01ms !important;
     }
 }
+
+/* ===== Sobre mim ===== */
+.sobre-grid {
+    display: grid;
+    grid-template-columns: minmax(0, .95fr) minmax(0, 1.05fr);
+    gap: 80px;
+    align-items: center;
+}
+
+.sobre-texto .texto {
+    max-width: 480px;
+    font-size: 14px;
+}
+
+.sobre-texto .texto + .texto {
+    margin-top: -12px;
+}
+
+.sobre-texto .btn {
+    margin-top: 8px;
+}
+
+.sobre-card {
+    padding: 28px;
+    background: var(--superficie);
+    border: 2px solid var(--texto);
+    box-shadow: 8px 8px 0 var(--borda);
+    transform: rotate(-.8deg);
+    transition: transform .6s var(--ease-out), box-shadow .6s var(--ease-out),
+        background .4s var(--ease-out), border-color .4s var(--ease-out);
+}
+
+.sobre-card:hover {
+    transform: rotate(0deg) translateY(-6px);
+    box-shadow: 14px 14px 0 var(--borda);
+}
+
+.sobre-numeros {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+    margin-bottom: 24px;
+}
+
+.sobre-numeros div {
+    display: flex;
+    flex-direction: column;
+    padding: 14px 12px;
+    border: 1px solid var(--borda);
+}
+
+.sobre-numeros strong {
+    font: 900 clamp(34px, 4vw, 48px)/1 'Barlow Condensed', sans-serif;
+    letter-spacing: -.02em;
+}
+
+.sobre-numeros span {
+    margin-top: 6px;
+    color: var(--cinza);
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+}
+
+.sobre-lista {
+    list-style: none;
+}
+
+.sobre-lista li {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 16px;
+    padding: 14px 0;
+    border-top: 1px solid var(--borda);
+}
+
+.sobre-lista b {
+    font: 800 18px 'Barlow Condensed', sans-serif;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+}
+
+.sobre-lista span {
+    color: var(--cinza);
+    font-size: 12px;
+    text-align: right;
+}
+
+@media (max-width: 900px) {
+    .sobre-grid {
+        grid-template-columns: minmax(0, 1fr);
+        gap: 48px;
+    }
+}
+
+@media (max-width: 800px) {
+    .sobre-card {
+        padding: 20px 16px;
+        box-shadow: 6px 6px 0 var(--borda);
+    }
+
+    .sobre-lista li {
+        flex-direction: column;
+        gap: 2px;
+    }
+
+    .sobre-lista span {
+        text-align: left;
+    }
+}
