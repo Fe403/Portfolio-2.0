@@ -1995,3 +1995,10 @@ button:focus-visible {
     overflow-x: hidden;
     overflow-y: auto;
 }
+
+/* ===== Aviso no lugar do botão (projeto ainda sem repositório) ===== */
+.acoes .em-breve {
+    padding: 7px 12px;
+    border: 1px dashed var(--cinza);
+    line-height: 1.4;
+}
