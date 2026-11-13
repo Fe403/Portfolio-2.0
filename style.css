@@ -1,3 +1,12 @@
+/* =====================================================================
+   ÍNDICE (procure pelo título da seção com Ctrl+F)
+   Cores e curvas · Base · Intro · Títulos animados · Barra do topo ·
+   Troca de tema · Hero · Cabeçalho das seções · Projetos · Selo de status ·
+   Diplomas · Contato · Footer · Onda ao clicar · Entrada ao rolar ·
+   Responsivo (1400 / 1100 / 900 / 800 / 400) · Toque · Movimento reduzido ·
+   Hero: foto + carrossel · Foco visível · Menu mobile · Acessibilidade
+   ===================================================================== */
+
 /* ===== Cores e curvas de movimento ===== */
 :root {
     --ease-out: cubic-bezier(.22, 1, .36, 1);
@@ -2010,4 +2019,129 @@ button:focus-visible {
 html,
 body {
     overflow-x: clip;
+}
+
+/* ===== Foco visível nos campos do formulário ===== */
+input:focus-visible,
+textarea:focus-visible {
+    outline: 2px solid var(--texto);
+    outline-offset: 3px;
+}
+
+/* ===== Link "pular para o conteúdo" (aparece só ao navegar com Tab) ===== */
+.pular {
+    position: fixed;
+    top: 8px;
+    left: 8px;
+    z-index: 200;
+    padding: 10px 14px;
+    color: #0d0d0d;
+    background: #d9d9d9;
+    border: 2px solid #0d0d0d;
+    font: 800 12px 'DM Sans', sans-serif;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    transform: translateY(-200%);
+}
+
+.pular:focus {
+    transform: none;
+}
+
+main:focus {
+    outline: none;
+}
+
+/* ===== Menu mobile ===== */
+.menu-toggle {
+    display: none;
+}
+
+@media (max-width: 800px) {
+    .topbar {
+        grid-template-columns: 1fr auto auto;
+        gap: 10px;
+    }
+
+    .menu-toggle {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        gap: 5px;
+        width: 40px;
+        height: 36px;
+        padding: 0;
+        background: transparent;
+        color: var(--texto);
+        border: 2px solid var(--texto);
+        box-shadow: 3px 3px 0 var(--borda);
+        cursor: pointer;
+    }
+
+    .menu-toggle span:not(.onda) {
+        display: block;
+        width: 18px;
+        height: 2px;
+        background: currentColor;
+        transition: transform .35s var(--ease-out), opacity .25s var(--ease-out);
+    }
+
+    .menu-toggle.aberto span:nth-child(1) {
+        transform: translateY(7px) rotate(45deg);
+    }
+
+    .menu-toggle.aberto span:nth-child(2) {
+        opacity: 0;
+    }
+
+    .menu-toggle.aberto span:nth-child(3) {
+        transform: translateY(-7px) rotate(-45deg);
+    }
+
+    /* o menu vira uma gaveta logo abaixo da barra */
+    nav.active {
+        position: absolute;
+        top: 100%;
+        left: 0;
+        right: 0;
+        display: flex;
+        flex-direction: column;
+        gap: 0;
+        padding: 8px 16px 16px;
+        background: var(--bg);
+        border-bottom: 1px solid var(--borda);
+        font-size: 13px;
+    }
+
+    nav.active a {
+        padding: 14px 0;
+        border-bottom: 1px solid var(--borda);
+    }
+
+    nav.active a:last-child {
+        border-bottom: 0;
+    }
+
+    nav.active a::after {
+        bottom: 6px;
+        width: 40px;
+    }
+}
+
+/* ===== Movimento reduzido: o que ainda faltava ===== */
+@media (prefers-reduced-motion: reduce) {
+    html {
+        scroll-behavior: auto;
+    }
+
+    body,
+    .intro-logo {
+        transition: none;
+        animation: none;
+    }
+
+    .menu-toggle span {
+        transition-duration: .01ms !important;
+    }
 }

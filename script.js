@@ -34,10 +34,18 @@ if (intro) {
 const botaoTema = document.getElementById('tema');
 const textoTema = document.getElementById('tema-texto');
 
+// localStorage pode estar bloqueado (modo privado, política do navegador): nunca deixa quebrar o site
+function lerSalvo(chave) {
+  try { return localStorage.getItem(chave); } catch (e) { return null; }
+}
+function gravarSalvo(chave, valor) {
+  try { localStorage.setItem(chave, valor); } catch (e) {}
+}
+
 function aplicarTema(claro) {
   document.body.classList.toggle('claro', claro);
   textoTema.textContent = claro ? 'Preto' : 'Branco';
-  localStorage.setItem('tema', claro ? 'claro' : 'escuro');
+  gravarSalvo('tema', claro ? 'claro' : 'escuro');
 }
 
 function virarTexto() {
@@ -45,7 +53,7 @@ function virarTexto() {
   textoTema.addEventListener('animationend', () => textoTema.classList.remove('virar'), { once: true });
 }
 
-aplicarTema(localStorage.getItem('tema') === 'claro');
+aplicarTema(lerSalvo('tema') === 'claro');
 
 botaoTema.addEventListener('click', () => {
   const vaiFicarClaro = !document.body.classList.contains('claro');
@@ -248,7 +256,18 @@ if (form) {
         body: new FormData(form),
         headers: { Accept: 'application/json' }
       });
-      if (!resposta.ok) throw new Error('falhou');
+
+      if (!resposta.ok) {
+        // o Formspree devolve os campos com problema em "errors"
+        let detalhe = '';
+        try {
+          const dados = await resposta.json();
+          if (dados.errors) detalhe = dados.errors.map((e) => e.message).join(' ');
+        } catch (e) {}
+        const falha = new Error('resposta');
+        falha.detalhe = detalhe;
+        throw falha;
+      }
 
       animarSucesso();
       textoEnviar.textContent = 'Mensagem enviada! ✓';
@@ -256,7 +275,15 @@ if (form) {
       form.reset();
     } catch (erro) {
       textoEnviar.textContent = 'Tentar de novo';
-      mostrarAviso('Não consegui enviar agora. Tente de novo ou me chame em andrefellipe676@gmail.com.', true);
+      if (erro.message === 'resposta') {
+        mostrarAviso(
+          (erro.detalhe ? erro.detalhe + ' ' : '') +
+          'Confira os campos e tente de novo, ou me chame em andrefellipe676@gmail.com.',
+          true
+        );
+      } else {
+        mostrarAviso('Parece que você está sem conexão. Verifique a internet e tente de novo, ou me chame em andrefellipe676@gmail.com.', true);
+      }
     } finally {
       enviando = false;
       botao.disabled = false;
@@ -343,6 +370,39 @@ if (visual) {
   });
   visual.addEventListener('pointerleave', () => { alvoX = alvoY = 0; iniciar(); });
   visual.addEventListener('pointerup', () => { alvoX = alvoY = 0; iniciar(); });
+}
+
+/* ===== Menu mobile (botão hambúrguer) ===== */
+const menuToggle = document.getElementById('menu-toggle');
+const menu = document.getElementById('menu');
+
+if (menuToggle && menu) {
+  function definirMenu(aberto) {
+    menu.classList.toggle('active', aberto);
+    menuToggle.classList.toggle('aberto', aberto);
+    menuToggle.setAttribute('aria-expanded', String(aberto));
+    menuToggle.setAttribute('aria-label', aberto ? 'Fechar menu' : 'Abrir menu');
+  }
+
+  menuToggle.addEventListener('click', () => {
+    definirMenu(!menu.classList.contains('active'));
+  });
+
+  // fecha ao escolher um link
+  menu.querySelectorAll('a').forEach((a) => a.addEventListener('click', () => definirMenu(false)));
+
+  // fecha com Esc (e devolve o foco ao botão)
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && menu.classList.contains('active')) {
+      definirMenu(false);
+      menuToggle.focus();
+    }
+  });
+
+  // se a tela crescer, o menu volta ao normal
+  matchMedia('(min-width: 801px)').addEventListener('change', (e) => {
+    if (e.matches) definirMenu(false);
+  });
 }
 
 /* ===== Menu: marca a seção atual ===== */
