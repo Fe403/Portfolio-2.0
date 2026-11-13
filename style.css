@@ -2002,3 +2002,12 @@ button:focus-visible {
     border: 1px dashed var(--cinza);
     line-height: 1.4;
 }
+
+/* ===== Evita rolagem/zoom lateral no celular =====
+   A foto do topo tem fita, sombra e leve rotação que passam um pouco da
+   borda da tela. Sem isso, o navegador do celular "afasta" a página pra
+   caber tudo e a tela de carregamento (que é fixa) fica torta. */
+html,
+body {
+    overflow-x: clip;
+}
