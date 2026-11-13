@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="pt-br">
+<html lang="pt-BR">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -25,6 +25,16 @@
     />
     <meta property="og:image:alt" content="Foto de André Fellipe" />
     <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="André Fellipe | Portfólio" />
+    <meta
+      name="twitter:description"
+      content="Estudante de Ciência da Computação e desenvolvedor web. Veja meus projetos, certificados e fale comigo."
+    />
+    <meta
+      name="twitter:image"
+      content="https://fe403.vercel.app/assets/andre-fellipe.jpg"
+    />
+    <link rel="canonical" href="https://fe403.vercel.app/" />
 
     <link rel="icon" href="assets/fe403-icone.png" />
 
@@ -45,6 +55,13 @@
   </head>
 
   <body class="carregando">
+    <script>
+      /* aplica o tema salvo antes da primeira pintura (evita piscar) */
+      try {
+        if (localStorage.getItem("tema") === "claro")
+          document.body.classList.add("claro");
+      } catch (e) {}
+    </script>
     <!-- INTRO -->
     <div id="intro" aria-hidden="true">
       <img src="assets/fe403-icone.png" alt="" class="intro-logo" />
@@ -67,7 +84,7 @@
         <a href="#diplomas">Diplomas</a>
         <a href="#contato">Contato</a>
       </nav>
-      <button id="tema" aria-label="Alternar tema">
+      <button id="tema" aria-label="Mudar para o tema branco">
         <span id="tema-texto">Branco</span>
       </button>
       <button
@@ -98,8 +115,7 @@
             meu trabalho.
           </p>
           <a class="btn btn-cheio" href="#projetos">Ver projetos</a>
-         
-          <a
+                    <a
             class="btn btn-download"
             href="assets/Curriculo.pdf"
             download="Curriculo-Andre-Fellipe.pdf"
@@ -111,8 +127,8 @@
         <div class="hero-lado">
           <div class="hero-visual">
             <div class="foto">
-              <span class="fita fita-topo"></span>
-              <span class="fita fita-baixo"></span>
+              <span class="fita fita-topo" aria-hidden="true"></span>
+              <span class="fita fita-baixo" aria-hidden="true"></span>
               <img
                 src="assets/andre-fellipe.jpg"
                 alt="Foto de André Fellipe"
@@ -120,14 +136,15 @@
               />
               <span class="legenda">ESTUDANTE / DEV</span>
             </div>
-            <span class="sticker sticker-code"
+            <span class="sticker sticker-code" aria-hidden="true"
               >&lt;/&gt;<strong>CODE</strong><small>EVERYDAY</small></span
             >
-            <span class="sticker sticker-ready">Esse<br />Sou eu!</span>
+            <span class="sticker sticker-ready" aria-hidden="true">Esse<br />Sou eu!</span>
           </div>
 
           <div
             class="carrossel"
+            role="group"
             aria-label="Linguagens e tecnologias que eu uso"
           >
             <div class="trilha">
@@ -285,7 +302,7 @@
               </div>
               <div class="projeto-corpo">
                 <h3>Relógio</h3>
-                <p>Relogio feito pra contar as horas de estudo.</p>
+                <p>Relógio feito para contar as horas de estudo.</p>
                 <div class="tags">
                   <span class="tag">HTML</span><span class="tag">CSS</span
                   ><span class="tag">JavaScript</span>
@@ -377,8 +394,8 @@
                 <h3>NutriExpress</h3>
                 <p>
                   API REST para um delivery de comida saudável, com cadastro e
-                  consulta de pratos. São algumas das coisas que aprendi de
-                  back-end.
+                  consulta de pratos. Reúne o que aprendi de back-end até
+                  agora.
                 </p>
                 <div class="tags">
                   <span class="tag">Java</span
@@ -581,7 +598,7 @@
           document.body.classList.remove("carregando");
           setTimeout(() => i.remove(), 1000);
         }
-      }, 8000);
+      }, 5000);
     </script>
   </body>
 </html>

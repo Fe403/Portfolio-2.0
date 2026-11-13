@@ -51,7 +51,6 @@ body {
     color: var(--texto);
     font-family: 'DM Sans', sans-serif;
     line-height: 1.6;
-    overflow-x: hidden;
     transition: background .4s var(--ease-out), color .4s var(--ease-out);
 }
 
@@ -435,7 +434,7 @@ nav a.ativo::after {
 /* ===== Hero ===== */
 #inicio {
     display: grid;
-    grid-template-columns: 1.08fr .82fr;
+    grid-template-columns: minmax(0, 1.08fr) minmax(0, .82fr);
     align-items: center;
     gap: 60px;
     min-height: 700px;
@@ -649,7 +648,7 @@ nav a.ativo::after {
 }
 
 .sticker-code small {
-    font-size: 7px;
+    font-size: 8px;
     letter-spacing: 2px;
 }
 
@@ -832,7 +831,7 @@ nav a.ativo::after {
 
 .tag {
     padding: 4px 8px;
-    font-size: 9px;
+    font-size: 11px;
     font-weight: 700;
     text-transform: uppercase;
     letter-spacing: 1px;
@@ -853,7 +852,7 @@ nav a.ativo::after {
     margin-top: 24px;
     padding-top: 18px;
     border-top: 1px solid var(--borda);
-    font-size: 10px;
+    font-size: 11px;
     font-weight: 800;
     text-transform: uppercase;
     letter-spacing: 1px;
@@ -1034,7 +1033,7 @@ body.claro .status-dev {
     z-index: 1;
     display: flex;
     justify-content: space-between;
-    font-size: 9px;
+    font-size: 11px;
     font-weight: 800;
     letter-spacing: 1.5px;
 }
@@ -1066,7 +1065,7 @@ body.claro .status-dev {
     position: relative;
     z-index: 1;
     margin: 52px 0 5px;
-    font-size: 8px;
+    font-size: 10px;
     font-weight: 700;
     letter-spacing: 2px;
     text-transform: uppercase;
@@ -1307,7 +1306,7 @@ footer .conteudo {
 
 footer p {
     color: var(--cinza);
-    font-size: 10px;
+    font-size: 11px;
     font-weight: 700;
     letter-spacing: 2px;
     text-align: center;
@@ -1500,7 +1499,7 @@ form.revelar.visivel {
     }
 
     #inicio {
-        grid-template-columns: 1fr;
+        grid-template-columns: minmax(0, 1fr);
         gap: 70px;
         text-align: left;
     }
@@ -1545,7 +1544,8 @@ form.revelar.visivel {
     }
 
     .topbar {
-        grid-template-columns: 1fr auto;
+        grid-template-columns: 1fr auto auto;
+        gap: 10px;
         padding: 14px 16px;
         min-height: 64px;
     }
@@ -1560,7 +1560,7 @@ form.revelar.visivel {
 
     #tema {
         padding: 8px 12px;
-        font-size: 10px;
+        font-size: 11px;
     }
 
     h1 {
@@ -1587,7 +1587,7 @@ form.revelar.visivel {
     }
 
     .eyebrow {
-        font-size: 10px;
+        font-size: 11px;
         letter-spacing: 2px;
         margin-bottom: 14px;
     }
@@ -1603,7 +1603,7 @@ form.revelar.visivel {
 
     .btn {
         padding: 12px 18px;
-        font-size: 10px;
+        font-size: 11px;
         margin: 24px 8px 0 0;
     }
 
@@ -1654,7 +1654,7 @@ form.revelar.visivel {
     .legenda {
         right: -10px;
         bottom: 18px;
-        font-size: 10px;
+        font-size: 11px;
         padding: 6px 10px;
     }
 
@@ -1685,7 +1685,7 @@ form.revelar.visivel {
 
     /* selo de status no mobile */
     .status {
-        font-size: 9px;
+        font-size: 10px;
         padding: 3px 8px;
         right: 10px;
         bottom: 10px;
@@ -1787,7 +1787,7 @@ form.revelar.visivel {
     }
 
     .sticker-code small {
-        font-size: 6px;
+        font-size: 7px;
     }
 
     .sticker-ready {
@@ -1798,7 +1798,7 @@ form.revelar.visivel {
     }
 
     .acoes {
-        font-size: 9px;
+        font-size: 10px;
     }
 
     .acoes a {
@@ -1838,6 +1838,15 @@ form.revelar.visivel {
 
 /* ===== Quem prefere menos movimento no sistema ===== */
 @media (prefers-reduced-motion: reduce) {
+    html {
+        scroll-behavior: auto;
+    }
+
+    body,
+    .intro-logo {
+        transition: none;
+        animation: none;
+    }
 
     :where(header, main, footer) *,
     :where(header, main, footer) *::before,
@@ -1852,6 +1861,15 @@ form.revelar.visivel {
 
     .titulo-anima:not(.visivel) .letra {
         opacity: 1;
+    }
+
+    /* o carrossel anda sempre (é lento e decorativo) */
+    .trilha {
+        animation: carrossel 40s linear infinite !important;
+    }
+
+    .carrossel:hover .trilha {
+        animation-play-state: paused !important;
     }
 }
 
@@ -1957,30 +1975,10 @@ form.revelar.visivel {
     .hero-lado { width: 94%; }
 }
 
-/* o carrossel anda sempre (é lento e decorativo) */
-@media (prefers-reduced-motion: reduce) {
-    .trilha {
-        animation: carrossel 40s linear infinite !important;
-    }
-
-    .carrossel:hover .trilha {
-        animation-play-state: paused !important;
-    }
-}
-/* ===== Corrige a coluna da foto: o carrossel não pode alargar a grade ===== */
-#inicio {
-    grid-template-columns: minmax(0, 1.08fr) minmax(0, .82fr);
-}
-
+/* ===== Hero: o carrossel não pode alargar as colunas ===== */
 .hero-texto,
 .hero-lado {
     min-width: 0;
-}
-
-@media (max-width: 900px) {
-    #inicio {
-        grid-template-columns: minmax(0, 1fr);
-    }
 }
 
 /* ===== Foco visível (quem navega com a tecla Tab) ===== */
@@ -2058,11 +2056,6 @@ main:focus {
 }
 
 @media (max-width: 800px) {
-    .topbar {
-        grid-template-columns: 1fr auto auto;
-        gap: 10px;
-    }
-
     .menu-toggle {
         display: flex;
         flex-direction: column;
@@ -2129,23 +2122,6 @@ main:focus {
     }
 }
 
-/* ===== Movimento reduzido: o que ainda faltava ===== */
-@media (prefers-reduced-motion: reduce) {
-    html {
-        scroll-behavior: auto;
-    }
-
-    body,
-    .intro-logo {
-        transition: none;
-        animation: none;
-    }
-
-    .menu-toggle span {
-        transition-duration: .01ms !important;
-    }
-}
-
 /* ===== Sobre mim ===== */
 .sobre-grid {
     display: grid;
@@ -2192,6 +2168,7 @@ main:focus {
 .sobre-numeros div {
     display: flex;
     flex-direction: column;
+    min-width: 0;
     padding: 14px 12px;
     border: 1px solid var(--borda);
 }
@@ -2204,10 +2181,11 @@ main:focus {
 .sobre-numeros span {
     margin-top: 6px;
     color: var(--cinza);
-    font-size: 10px;
+    font-size: 11px;
     font-weight: 700;
     letter-spacing: 2px;
     text-transform: uppercase;
+    overflow-wrap: anywhere;
 }
 
 .sobre-lista {
@@ -2248,26 +2226,6 @@ main:focus {
         box-shadow: 6px 6px 0 var(--borda);
     }
 
-    .sobre-lista li {
-        flex-direction: column;
-        gap: 2px;
-    }
-
-    .sobre-lista span {
-        text-align: left;
-    }
-}
-
-/* ===== Sobre mim: números sem estourar o quadrado no celular ===== */
-.sobre-numeros div {
-    min-width: 0;
-}
-
-.sobre-numeros span {
-    overflow-wrap: anywhere;
-}
-
-@media (max-width: 800px) {
     .sobre-numeros {
         gap: 8px;
     }
@@ -2277,8 +2235,16 @@ main:focus {
     }
 
     .sobre-numeros span {
-        font-size: 10px;
         letter-spacing: 1px;
+    }
+
+    .sobre-lista li {
+        flex-direction: column;
+        gap: 2px;
+    }
+
+    .sobre-lista span {
+        text-align: left;
     }
 }
 
@@ -2297,7 +2263,6 @@ main:focus {
 
     .sobre-numeros span {
         margin-top: 0;
-        font-size: 11px;
         letter-spacing: 2px;
     }
 }

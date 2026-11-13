@@ -10,7 +10,7 @@ if (intro) {
     intro.remove();
     document.body.classList.remove('carregando');
   } else {
-    const TEMPO_MINIMO = 1200;
+    const TEMPO_MINIMO = 800;
     const inicio = performance.now();
 
     function terminarIntro() {
@@ -45,6 +45,9 @@ function gravarSalvo(chave, valor) {
 function aplicarTema(claro) {
   document.body.classList.toggle('claro', claro);
   textoTema.textContent = claro ? 'Preto' : 'Branco';
+  botaoTema.setAttribute('aria-label', claro ? 'Mudar para o tema preto' : 'Mudar para o tema branco');
+  const corBarra = document.querySelector('meta[name="theme-color"]');
+  if (corBarra) corBarra.setAttribute('content', claro ? '#f3f3f0' : '#0d0d0d');
   gravarSalvo('tema', claro ? 'claro' : 'escuro');
 }
 
