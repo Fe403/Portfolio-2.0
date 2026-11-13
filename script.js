@@ -373,3 +373,14 @@ if (fotoHero) {
     fotoHero.alt = '';
   });
 }
+
+/* ===== Rede de segurança: print de projeto que não carregar ===== */
+document.querySelectorAll('.projeto-arte img').forEach((img) => {
+  const falhou = () => {
+    img.style.display = 'none';
+    img.closest('.projeto-arte').style.background =
+      'repeating-linear-gradient(135deg, rgba(128,128,128,.25) 0 2px, transparent 2px 14px)';
+  };
+  img.addEventListener('error', falhou);
+  if (img.complete && img.naturalWidth === 0 && img.getAttribute('src')) falhou();
+});
